@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Code Generator</title>
+    <style>
+        .red {
+            color: red;
+        }
+    
+        .black {
+            color: black;
+        }
+    
+        .green {
+            color: green;
+        }
+    </style>
+    <script>
+        async function generateCode() {
+            let text = document.getElementById('inputText').value;
+            let data = { text: text };
+
+            let response = await fetch('/generate-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            // Zeige die Antwort an
+            if (response.ok) {
+                let result = await response.json();
+                if(result.code) {
+                    document.getElementById('outputCode').textContent = result.code;
+                } else if(result.error) {
+                    document.getElementById('outputCode').textContent = 'Fehler: ' + result.error;
+                }
+            } else {
+                document.getElementById('outputCode').textContent = 'Fehler bei der Anfrage!';
+            }
+}
+    </script>
+</head>
+<body>
+    <div style="display: flex;">
+        <!-- Linkes Feld für Texteingabe -->
+        <div style="flex: 1;">
+            <h2>Eingabe:</h2>
+            <textarea id="inputText" rows="4" cols="50" placeholder="Geben Sie Ihre Anweisung hier ein"></textarea>
+            <button onclick="generateCode()">Generiere Code</button>
+        </div>
+        <!-- Rechtes Feld für generierten Code -->
+        <div style="flex: 1;">
+            <h2>Generierter Code:</h2>
+            <pre id="outputCode" style="white-space: pre-wrap;"></pre> <!-- Hier wird der generierte Code angezeigt -->
+        </div>
+    </div>
+</body>
+</html>
