@@ -70,7 +70,7 @@
             if (response.ok) {
                 let result = await response.json();
                 if(result.code) {
-                    document.getElementById('outputCode').textContent = result.code;
+                    document.getElementById('outputCode').innerHTML = result.code;
                 } else if(result.error) {
                     document.getElementById('outputCode').textContent = 'Fehler: ' + result.error;
                 }
