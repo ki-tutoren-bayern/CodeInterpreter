@@ -6,16 +6,51 @@
     <meta charset="UTF-8">
     <title>Code Generator</title>
     <style>
-        .red {
-            color: red;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            color: #333;
         }
-    
-        .black {
-            color: black;
+
+        .container {
+            display: flex;
+            gap: 20px;
         }
-    
-        .green {
-            color: green;
+
+        .box {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea {
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4CAF50; /* Grüne Farbe */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
         }
     </style>
     <script>
@@ -46,17 +81,16 @@
     </script>
 </head>
 <body>
-    <div style="display: flex;">
-        <!-- Linkes Feld für Texteingabe -->
-        <div style="flex: 1;">
+        <div class="container">
+        <div class="box">
             <h2>Eingabe:</h2>
-            <textarea id="inputText" rows="4" cols="50" placeholder="Geben Sie Ihre Anweisung hier ein"></textarea>
+            <textarea id="inputText" rows="4" placeholder="Geben Sie Ihre Anweisung hier ein"></textarea>
             <button onclick="generateCode()">Generiere Code</button>
         </div>
-        <!-- Rechtes Feld für generierten Code -->
-        <div style="flex: 1;">
+
+        <div class="box">
             <h2>Generierter Code:</h2>
-            <pre id="outputCode" style="white-space: pre-wrap;"></pre> <!-- Hier wird der generierte Code angezeigt -->
+            <pre id="outputCode"></pre>
         </div>
     </div>
 </body>
