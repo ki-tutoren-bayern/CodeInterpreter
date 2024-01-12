@@ -72,10 +72,10 @@
                 if(result.code) {
                     document.getElementById('outputCode').innerHTML = result.code;
                 } else if(result.error) {
-                    document.getElementById('outputCode').textContent = 'Fehler: ' + result.error;
+                    document.getElementById('outputCode').textContent = 'Selbst mit dieser Lösung machst du Fehler: ' + result.error;
                 }
             } else {
-                document.getElementById('outputCode').textContent = 'Fehler bei der Anfrage!';
+                document.getElementById('outputCode').textContent = 'Selbstzerstörungsmodus. Das ganze Internet wird mit Ihrer Existenz gelöscht. Um diesen Vorgang zu wiederrufen mussen Sie einen weiteren Generierungsvorgang starten';
             }
 }
     </script>
