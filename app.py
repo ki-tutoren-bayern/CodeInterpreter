@@ -13,13 +13,6 @@ openai.api_key = os.environ.get("OPENAI_API_KEY", "Standardwert")
 
 app = Flask(__name__)
 
-# Beispielhafte Liste von Tokens, die Sie anzeigen möchten
-sample_tokens = [
-    ('TokenType1', 'Token1'),
-    ('TokenType2', 'Token2'),
-    # Fügen Sie hier weitere Tokens hinzu, wie sie benötigt werden.
-]
-
 @app.route('/display-tokens', methods=['GET'])
 def display_tokens():
     try:
