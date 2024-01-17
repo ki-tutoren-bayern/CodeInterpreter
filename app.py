@@ -4,6 +4,7 @@ import tokenize
 from io import BytesIO
 import re
 import requests
+import ast
 # Drittanbieter-Bibliothek Importe
 from flask import Flask, request, jsonify, render_template
 import openai
@@ -61,7 +62,23 @@ def generate_code():
     
     return jsonify({'code': code})
 
-# Backend - Frontend Kommunikation -> Wird später zur API-Schnittstelle
+@app.route('/generate-syntax-tree', methods=['POST'])
+def generate_syntax_tree():
+    try:
+        data = request.get_json()
+        code = data['code']
+        print("Empfangener Code:", code) #Nur zum Debuggen. Kann später gelöscht werden ohne sorge
+
+        # Erzeugen des Syntaxbaums aus dem Code
+        syntax_tree = ast.parse(code)
+        # Umwandeln des Syntaxbaums in eine String-Repräsentation (optional)
+        tree_string = ast.dump(syntax_tree, indent=4)
+        return jsonify({'syntax_tree': tree_string})
+    
+    except Exception as e:
+        print(f"Fehler beim Erzeugen des Syntaxbaums: {e}")
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/')
 def index():
     return render_template('index.html')

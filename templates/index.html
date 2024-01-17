@@ -93,11 +93,37 @@
             }
         }
 
+        async function generateSyntaxTree() {
+            let code = document.getElementById('inputText').value;
+            let data = { code: generatedCode };
+
+            try {
+                let response = await fetch('/generate-syntax-tree', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    let result = await response.json();
+                    displaySyntaxTree(result);
+                } else {
+                    displayError('Fehler beim Generieren des Syntaxbaums');
+                }
+            } catch (error) {
+                displayError('Fehler beim Senden der Anfrage: ' + error.message);
+            }
+        }
+
         function displayResult(result) {
             let outputStr = '';
 
             if (result.code) {
                 outputStr += '<h3>Generierter Code:</h3><pre>' + result.code + '</pre>';
+                generatedCode = result.code;  // Speichern des generierten Codes
+                generateSyntaxTree();  // Automatisches Erzeugen des Syntaxbaums
             }
 
             if (result.tokens) {
@@ -116,11 +142,18 @@
             document.getElementById('outputCode').innerHTML = outputStr;
         }
 
+        function displaySyntaxTree(result) {
+            console.log('Empfangener Syntaxbaum:', result);
+            if (result.syntax_tree) {
+                let outputStr = '<h3>Syntaxbaum:</h3><pre>' + result.syntax_tree + '</pre>';
+                document.getElementById('outputCode').innerHTML += outputStr;
+            }
+        }
+
         function displayError(errorMessage) {
             document.getElementById('outputCode').textContent = errorMessage;
         }
 
-        // JavaScript-Funktion für das Pop-up-Fenster
         function openTokenTab(tokens) {
             let blob = new Blob([tokens], { type: 'text/plain' });
             let url = URL.createObjectURL(blob);
