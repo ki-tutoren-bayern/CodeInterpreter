@@ -1,6 +1,7 @@
 # Standardbibliothek Importe
 import os
 import tokenize
+from tokenize import tokenize, tok_name
 from io import BytesIO
 import re
 import requests
@@ -47,7 +48,7 @@ def generate_code():
         tokens = list(tokenize.tokenize(BytesIO(code.encode('utf-8')).readline))
 
         # Optional: Extrahieren der Token-Typen und -Inhalte
-        token_data = [(token.type, token.string) for token in tokens]
+        token_data = [(tok_name[token.type], token.string) for token in tokens]
 
         # Erstellen Sie den Link zum Anzeigen der Tokens
         token_url = f"http://127.0.0.1:5000/display-tokens"
