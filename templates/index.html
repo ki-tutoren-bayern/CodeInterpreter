@@ -1,5 +1,3 @@
-<!-- Schauen ob sich was ändert -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,38 +56,89 @@
             let text = document.getElementById('inputText').value;
             let data = { text: text };
 
-            let response = await fetch('/generate-code', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+            try {
+                let response = await fetch('/generate-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
 
-            // Zeige die Antwort an
-            if (response.ok) {
-                let result = await response.json();
-                if(result.code) {
-                    document.getElementById('outputCode').innerHTML = result.code;
-                } else if(result.error) {
-                    document.getElementById('outputCode').textContent = 'Selbst mit dieser Lösung machst du Fehler: ' + result.error;
+                if (response.ok) {
+                    let result = await response.json();
+                    displayResult(result);
+                } else {
+                    displayError('Fehler beim Verbindungsaufbau');
                 }
-            } else {
-                document.getElementById('outputCode').textContent = 'Selbstzerstörungsmodus. Das ganze Internet wird mit Ihrer Existenz gelöscht. Um diesen Vorgang zu wiederrufen mussen Sie einen weiteren Generierungsvorgang starten';
+            } catch (error) {
+                displayError('Fehler beim Senden der Anfrage: ' + error.message);
             }
-}
+        }
+
+        async function fetchTokens() {
+            try {
+                let response = await fetch('/display-tokens', {
+                    method: 'GET'
+                });
+
+                if (response.ok) {
+                    let result = await response.json();
+                    displayTokens(result);
+                } else {
+                    displayError('Fehler beim Abrufen der Tokens');
+                }
+            } catch (error) {
+                displayError('Fehler beim Senden der Anfrage: ' + error.message);
+            }
+        }
+
+        function displayResult(result) {
+            let outputStr = '';
+
+            if (result.code) {
+                outputStr += '<h3>Generierter Code:</h3><pre>' + result.code + '</pre>';
+            }
+
+            if (result.tokens) {
+                let tokenStr = result.tokens.map(token => `${token[0]}: ${token[1]}`).join('\n');
+                outputStr += '<h3>Tokens:</h3><pre>' + tokenStr + '</pre>';
+                outputStr += '<button onclick="openTokenTab(\'' + tokenStr + '\')">Tokens anzeigen</button>';
+            }
+
+            document.getElementById('outputCode').innerHTML = outputStr;
+        }
+
+        function displayTokens(result) {
+            let tokenStr = result.tokens.map(token => `${token[0]}: ${token[1]}`).join('\n');
+            let outputStr = '<h3>Tokens:</h3><pre>' + tokenStr + '</pre>';
+            outputStr += '<button onclick="openTokenTab(\'' + tokenStr + '\')">Tokens anzeigen</button>';
+            document.getElementById('outputCode').innerHTML = outputStr;
+        }
+
+        function displayError(errorMessage) {
+            document.getElementById('outputCode').textContent = errorMessage;
+        }
+
+        // JavaScript-Funktion für das Pop-up-Fenster
+        function openTokenTab(tokens) {
+            let blob = new Blob([tokens], { type: 'text/plain' });
+            let url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        }
     </script>
 </head>
 <body>
-        <div class="container">
+    <div class="container">
         <div class="box">
             <h2>Eingabe:</h2>
             <textarea id="inputText" rows="4" placeholder="Geben Sie Ihre Anweisung hier ein"></textarea>
             <button onclick="generateCode()">Generiere Code</button>
+            <button onclick="fetchTokens()">Hole Tokens</button> <!-- Button hinzugefügt, um Tokens abzurufen -->
         </div>
 
         <div class="box">
-            <h2>Generierter Code:</h2>
+            <h2>Generierter Code und Tokens:</h2>
             <pre id="outputCode"></pre>
         </div>
     </div>

@@ -1,4 +1,5 @@
 # Standardbibliothek Importe
+import os
 import tokenize
 from io import BytesIO
 import re
@@ -8,7 +9,7 @@ from flask import Flask, request, jsonify, render_template
 import openai
 
 # Setzen Sie Ihren OpenAI-API-Schlüssel hier ein
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+openai.api_key = os.environ.get("OPENAI_API_KEY", "Standardwert")
 
 app = Flask(__name__)
 
@@ -74,4 +75,5 @@ def index():
 
 if __name__ == '__main__':
     print("Öffnen Sie http://127.0.0.1:5000 in Ihrem Webbrowser, um das Frontend zu sehen.")
+    print("OPENAI_API_KEY:", os.environ.get("OPENAI_API_KEY"))
     app.run(debug=True)
