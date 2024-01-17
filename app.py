@@ -75,5 +75,4 @@ def index():
 
 if __name__ == '__main__':
     print("Öffnen Sie http://127.0.0.1:5000 in Ihrem Webbrowser, um das Frontend zu sehen.")
-    print("OPENAI_API_KEY:", os.environ.get("OPENAI_API_KEY"))
     app.run(debug=True)
