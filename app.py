@@ -1,7 +1,6 @@
 # Standardbibliothek Importe
 import os
 import tokenize
-from tokenize import tokenize, tok_name
 from io import BytesIO
 import re
 import requests
@@ -29,7 +28,7 @@ def display_tokens():
     except Exception as e:
         print(f"Fehler beim Bereitstellen der Tokens: {e}")
         return jsonify({"error": str(e)}), 500
-
+    
 @app.route('/generate-code', methods=['POST','GET'])
 def generate_code():
     try:
@@ -48,7 +47,7 @@ def generate_code():
         tokens = list(tokenize.tokenize(BytesIO(code.encode('utf-8')).readline))
 
         # Optional: Extrahieren der Token-Typen und -Inhalte
-        token_data = [(tok_name[token.type], token.string) for token in tokens]
+        token_data = [(token.type, token.string) for token in tokens]
 
         # Erstellen Sie den Link zum Anzeigen der Tokens
         token_url = f"http://127.0.0.1:5000/display-tokens"
@@ -62,11 +61,11 @@ def generate_code():
 
         # Zurückgeben oder Weiterverarbeiten der Tokens und des Codes
         return jsonify({'code': code, 'tokens': token_data})
-
+    
     except Exception as e:
         print(f"Fehler bei der Codegenerierung: {e}")
         return jsonify({"error": str(e)}), 500
-
+    
     return jsonify({'code': code})
 
 # Backend - Frontend Kommunikation -> Wird später zur API-Schnittstelle
@@ -76,4 +75,5 @@ def index():
 
 if __name__ == '__main__':
     print("Öffnen Sie http://127.0.0.1:5000 in Ihrem Webbrowser, um das Frontend zu sehen.")
+    print("OPENAI_API_KEY:", os.environ.get("OPENAI_API_KEY"))
     app.run(debug=True)
