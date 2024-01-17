@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify, render_template
 import openai
 
 # Setzen Sie Ihren OpenAI-API-Schlüssel hier ein
-openai.api_key = "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"
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
