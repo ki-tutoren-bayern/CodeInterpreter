@@ -36,7 +36,7 @@ def generate_code():
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-1106",
             messages=[{"role": "system", "content": "Python Code Generator"},
-                      {"role": "user", "content": f"Generiere Python-Code basierend auf: {text}. Ausgabe sollte direkt in Python-Code-Form ohne zusätzliche Formatierung sein."}]
+                      {"role": "user", "content": f"Generiere Python-Code basierend auf: {text}. Ausgabe sollte direkt in Python-Code-Form ohne zusätzliche Formatierung sein. Am Ende soll immer eine Ausgabe entstehen z.B. mit einem Befehl wie print."}]
         )
         code = response.choices[0].message['content']
 

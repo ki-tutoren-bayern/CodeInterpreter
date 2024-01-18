@@ -1,0 +1,38 @@
+// Sortieren der Liste 
+Liste = [5, 3, 8, 4, 2]
+BubbleSort(Liste):
+    Länge = Länge der Liste
+    für i von 0 bis Länge - 1
+        für j von 0 bis Länge - i - 1
+            wenn Liste[j] > Liste[j+1]
+                tausche Liste[j] mit Liste[j+1]
+BubbleSort(Liste)
+
+// Berechnungs des Durchschnitts
+BerechneDurchschnitt(Liste):
+    Summe = 0
+    Anzahl = Länge der Liste
+    für jede Zahl in Liste
+        Summe = Summe + Zahl
+    Durchschnitt = Summe / Anzahl
+    gib Durchschnitt zurück
+
+
+// Faktorielle Berechnung (Fakultät) 
+BerechneFakultät(n):
+    falls n gleich 0 oder n gleich 1
+        gib 1 zurück
+    sonst
+        Fakultät = 1
+        für i von 2 bis n
+            Fakultät = Fakultät * i
+        gib Fakultät zurück
+
+//Berechnung der Genauigkeit von Gleitkommazahlen 
+BerechneGenauigkeit():
+    Genauigkeit = 1
+    Fehler = 1.0
+    Solange 1.0 + Fehler != 1.0
+        Fehler = Fehler / 10
+        Genauigkeit = Genauigkeit + 1
+    gib Genauigkeit zurück
