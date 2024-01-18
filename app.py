@@ -49,7 +49,6 @@ def generate_code():
         # Token-Typ-Nummern durch lesbare Namen ersetzen
         token_data = [(token_names.get(tok.type, tok.type), tok.string) for tok in tokens if tok.type != tokenize.ENDMARKER]
 
-
         # Erstellen Sie den Link zum Anzeigen der Tokens
         token_url = f"http://127.0.0.1:5000/display-tokens"
 

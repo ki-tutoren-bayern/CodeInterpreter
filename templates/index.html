@@ -65,6 +65,11 @@
     }
     </style>
     <script>
+        
+        function removeMarkdownCodeBlock(code) {
+            return code.replace(/^```python\n|```$/gm, '');
+        }
+
         async function generateCode() {
             showLoadingSpinner('loadingGifOutput'); // Ladesymbol anzeigen
 
@@ -139,9 +144,10 @@
             let outputStr = '';
 
             if (result.code) {
-                outputStr = '<h3>Generierter Code:</h3><pre>' + result.code + '</pre>';
+                let cleanCode = removeMarkdownCodeBlock(result.code);
+                outputStr = '<h3>Generierter Code:</h3><pre>' + cleanCode + '</pre>';
                 document.getElementById('outputCode').innerHTML = outputStr;
-                generatedCode = result.code;  // Speichern des generierten Codes
+                generatedCode = cleanCode;  // Speichern des generierten Codes
                 generateSyntaxTree();  // Syntaxbaum generieren
             } else {
         
