@@ -50,6 +50,14 @@
             white-space: pre-wrap;
             overflow-wrap: break-word;
         }
+
+        #executionResult {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #eef;
+            border: 1px solid #ccd;
+            border-radius: 5px;
+        }
     </style>
     <script>
         async function generateCode() {
@@ -159,6 +167,31 @@
             let url = URL.createObjectURL(blob);
             window.open(url, '_blank');
         }
+
+        function executeGeneratedCode() {
+            fetch('/execute-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: generatedCode })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Ergebnis anzeigen
+                if (data.result) {
+                    document.getElementById('executionResult').textContent = 'Ergebnis: ' + data.result;
+                } else if (data.error) {
+                    document.getElementById('executionResult').textContent = 'Fehler: ' + data.error;
+                }
+            })
+            .catch(error => {
+                console.error('Fehler bei der Ausführung des Codes: ', error);
+                document.getElementById('executionResult').textContent = 'Ausführungsfehler: ' + error.message;
+            });
+        }
+
+
     </script>
 </head>
 <body>
@@ -167,11 +200,17 @@
             <h2>Eingabe:</h2>
             <textarea id="inputText" rows="4" placeholder="Geben Sie Ihre Anweisung hier ein"></textarea>
             <button onclick="generateCode()">Generiere Code</button>
+            <button onclick="executeGeneratedCode()">Code ausführen</button>
         </div>
 
         <div class="box">
             <h2>Generierter Code und Tokens:</h2>
             <pre id="outputCode"></pre>
+        </div>
+
+        <div class="box">
+            <h2>Ausführungsergebnis:</h2>
+            <pre id="executionResult"></pre>
         </div>
     </div>
 </body>

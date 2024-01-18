@@ -5,6 +5,8 @@ from io import BytesIO
 import re
 import requests
 import ast
+import contextlib
+import io
 # Drittanbieter-Bibliothek Importe
 from flask import Flask, request, jsonify, render_template
 import openai
@@ -77,6 +79,27 @@ def generate_syntax_tree():
     
     except Exception as e:
         print(f"Fehler beim Erzeugen des Syntaxbaums: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/execute-code', methods=['POST'])
+def execute_code():
+    try:
+        data = request.get_json()
+        code = data['code']
+
+        # Implementieren Sie hier Ihre Sicherheitsmaßnahmen
+
+        # Ausführung des Codes (sicherheitsbewusst)
+        # Hinweis: Verwenden Sie exec() mit Vorsicht und entsprechenden Sicherheitsmaßnahmen
+        # Beispiel: exec(code, {'__builtins__': {}})
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            exec(code)
+        result = output.getvalue()
+
+        # Rückgabe des Ergebnisses
+        return jsonify({'result': result})
+    except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route('/')
