@@ -66,7 +66,7 @@
     </style>
     <script>
         async function generateCode() {
-            showLoadingSpinner('loadingGifInput'); // Ladesymbol anzeigen
+            showLoadingSpinner('loadingGifOutput'); // Ladesymbol anzeigen
 
             let text = document.getElementById('inputText').value;
             let data = { text: text };
@@ -89,7 +89,7 @@
             } catch (error) {
                 displayError('Fehler beim Senden der Anfrage: ' + error.message);
             } finally {
-                hideLoadingSpinner('loadingGifInput'); // Ladesymbol verstecken
+                hideLoadingSpinner('loadingGifOutput'); // Ladesymbol verstecken
             }
 
         }
