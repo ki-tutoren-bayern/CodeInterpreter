@@ -7,6 +7,7 @@ import requests
 import ast
 import contextlib
 import io
+import token
 # Drittanbieter-Bibliothek Importe
 from flask import Flask, request, jsonify, render_template
 import openai
@@ -39,11 +40,15 @@ def generate_code():
         )
         code = response.choices[0].message['content']
 
-        # Tokenisierung des generierten Codes
+        #Tokenisierung des generierten Codes
         tokens = list(tokenize.tokenize(BytesIO(code.encode('utf-8')).readline))
 
-        # Optional: Extrahieren der Token-Typen und -Inhalte
-        token_data = [(token.type, token.string) for token in tokens]
+        # Mapping von Token-Typ-Nummern zu Token-Namen
+        token_names = {value: name for name, value in vars(token).items() if isinstance(value, int)}
+
+        # Token-Typ-Nummern durch lesbare Namen ersetzen
+        token_data = [(token_names.get(tok.type, tok.type), tok.string) for tok in tokens if tok.type != tokenize.ENDMARKER]
+
 
         # Erstellen Sie den Link zum Anzeigen der Tokens
         token_url = f"http://127.0.0.1:5000/display-tokens"
