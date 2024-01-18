@@ -124,14 +124,14 @@
                     body: JSON.stringify(data)
                 });
 
-                if (response.ok) {
-                    let result = await response.json();
-                    displaySyntaxTree(result);
-                } else {
-                    displayError('Fehler beim Generieren des Syntaxbaums');
+                if (!response.ok) {
+                    throw new Error('Fehler beim Generieren des Syntaxbaums');
                 }
+
+                let result = await response.json();
+                displaySyntaxTree(result);
             } catch (error) {
-                displayError('Fehler beim Senden der Anfrage: ' + error.message);
+                displayError(error.message, 'syntaxTree');
             }
         }
 
@@ -140,18 +140,19 @@
 
             if (result.code) {
                 outputStr = '<h3>Generierter Code:</h3><pre>' + result.code + '</pre>';
+                document.getElementById('outputCode').innerHTML = outputStr;
                 generatedCode = result.code;  // Speichern des generierten Codes
-                generateSyntaxTree();  // Automatisches Erzeugen des Syntaxbaums
+                generateSyntaxTree();  // Syntaxbaum generieren
+            } else {
+        
+                document.getElementById('outputCode').innerHTML = 'Kein Code generiert.';
             }
 
-            document.getElementById('outputCode').innerHTML = outputStr;
-        
             if (result.tokens) {
                 displayTokens(result);
             }
-
-        }
-
+        } 
+        
         function displayTokens(result) {
             let tokensStr = '';
             if (result.tokens) {
@@ -164,13 +165,15 @@
         function displaySyntaxTree(result) {
             let syntaxTreeStr = '';
             if (result.syntax_tree) {
-                syntaxTreeStr = '<h3>Syntaxbaum:</h3><pre>' + result.syntax_tree + '</pre>';
+                syntaxTreeStr = '<h3>Syntaxbaum:</h3><pre>' + JSON.stringify(result.syntax_tree, null, 2) + '</pre>';
+            } else {
+                syntaxTreeStr = '<h3>Fehler beim Generieren des Syntaxbaums</h3><pre>' + result.error + '</pre>';
             }
             document.getElementById('syntaxTree').innerHTML = syntaxTreeStr;
         }
 
-        function displayError(errorMessage) {
-            document.getElementById('outputCode').textContent = errorMessage;
+        function displayError(errorMessage, errorSection = 'outputCode') {
+            document.getElementById(errorSection).innerHTML = '<h3>Fehler:</h3><pre>' + errorMessage + '</pre>';
         }
 
         function openTokenTab(tokens) {
