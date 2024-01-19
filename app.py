@@ -10,6 +10,7 @@ import io
 import token
 # Drittanbieter-Bibliothek Importe
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 import openai
 #eigene Importe
 from safe_functions import safe_functions
@@ -18,6 +19,7 @@ from safe_functions import safe_functions
 openai.api_key = os.environ.get("OPENAI_API_KEY", "Standardwert")
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:8080"}})
 
 class SafeFunctionChecker(ast.NodeVisitor):
     def __init__(self, safe_functions):
