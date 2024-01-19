@@ -68,7 +68,7 @@
             let text = document.getElementById('inputText').value;
             let data = { text: text };
             try {
-                let response = await fetch('http://37.27.34.253:5000/generate-code', {
+                let response = await fetch('http://37.27.34.253/generate-code', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -89,7 +89,7 @@
         }
         async function fetchTokens() {
             try {
-                let response = await fetch('http://37.27.34.253:5000/display-tokens', {
+                let response = await fetch('http://37.27.34.253/display-tokens', {
                     method: 'GET'
                 });
                 if (response.ok) {
@@ -106,7 +106,7 @@
             let code = document.getElementById('inputText').value;
             let data = { code: generatedCode };
             try {
-                let response = await fetch('http://37.27.34.253:5000/generate-syntax-tree', {
+                let response = await fetch('http://37.27.34.253/generate-syntax-tree', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -165,7 +165,7 @@
             window.open(url, '_blank');
         }
         function executeGeneratedCode() {
-            fetch('http://37.27.34.253:5000/execute-code', {
+            fetch('http://37.27.34.253/execute-code', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
