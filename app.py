@@ -11,11 +11,46 @@ import token
 # Drittanbieter-Bibliothek Importe
 from flask import Flask, request, jsonify, render_template
 import openai
+#eigene Importe
+from safe_functions import safe_functions
 
 # Setzen Sie Ihren OpenAI-API-Schlüssel hier ein
 openai.api_key = os.environ.get("OPENAI_API_KEY", "Standardwert")
 
 app = Flask(__name__)
+
+class SafeFunctionChecker(ast.NodeVisitor):
+    def __init__(self, safe_functions):
+        self.safe_functions = safe_functions
+        self.errors = []
+        self.local_defs = set()  # Zum Speichern lokaler Funktionsdefinitionen
+
+    def visit_FunctionDef(self, node):
+        self.local_defs.add(node.name)
+        self.generic_visit(node)
+
+    def visit_Call(self, node):
+        if isinstance(node.func, ast.Name):
+            func_name = node.func.id
+            if func_name not in self.safe_functions and func_name not in self.local_defs:
+                self.errors.append(f"Unsichere Funktion verwendet: {func_name}")
+        self.generic_visit(node)
+
+def analyze_code(code, safe_functions):
+    try:
+        # Kombinieren aller sicherer Funktionen
+        combined_safe_functions = set()
+        for func_list in safe_functions.values():
+            combined_safe_functions.update(func_list)
+
+        # Parsen des Codes und Überprüfen auf unsichere Funktionen
+        tree = ast.parse(code)
+        checker = SafeFunctionChecker(combined_safe_functions)
+        checker.visit(tree)
+
+        return checker.errors
+    except SyntaxError as e:
+        return [f"Syntaxfehler im Code: {e}"]
 
 @app.route('/display-tokens', methods=['GET'])
 def display_tokens():
@@ -91,7 +126,10 @@ def execute_code():
         data = request.get_json()
         code = data['code']
 
-        # Implementieren Sie hier Ihre Sicherheitsmaßnahmen
+        errors = analyze_code(code, safe_functions)
+        if errors:
+            # Rückgabe einer Fehlermeldung an das Frontend
+            return jsonify({"error": "Unsichere Funktionen gefunden: " + ", ".join(errors)})
 
         # Ausführung des Codes (sicherheitsbewusst)
         # Hinweis: Verwenden Sie exec() mit Vorsicht und entsprechenden Sicherheitsmaßnahmen
