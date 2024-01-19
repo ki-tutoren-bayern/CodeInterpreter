@@ -77,7 +77,7 @@
             let data = { text: text };
 
             try {
-                let response = await fetch('/generate-code', {
+                let response = await fetch('http://codeinterpeter.azurewebsites.net/generate-code', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -101,7 +101,7 @@
 
         async function fetchTokens() {
             try {
-                let response = await fetch('/display-tokens', {
+                let response = await fetch('http://codeinterpeter.azurewebsites.net/display-tokens', {
                     method: 'GET'
                 });
 
@@ -121,7 +121,7 @@
             let data = { code: generatedCode };
 
             try {
-                let response = await fetch('/generate-syntax-tree', {
+                let response = await fetch('http://codeinterpeter.azurewebsites.net/generate-syntax-tree', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -189,7 +189,7 @@
         }
 
         function executeGeneratedCode() {
-            fetch('/execute-code', {
+            fetch('http://codeinterpeter.azurewebsites.net/execute-code', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

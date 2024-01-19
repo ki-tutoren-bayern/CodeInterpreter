@@ -36,3 +36,10 @@ BerechneGenauigkeit():
         Fehler = Fehler / 10
         Genauigkeit = Genauigkeit + 1
     gib Genauigkeit zurück
+
+//Zeigt das systemkritische Anordnungen Aussortiert werden
+def EvaluierenAusdruck(Ausdruck):
+    return eval(Ausdruck)
+
+def UnsichereCodeAusführung(Code):
+    return eval(Code)
