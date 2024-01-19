@@ -10,12 +10,10 @@
             padding: 20px;
             color: #333;
         }
-
         .container {
             display: flex;
             gap: 20px;
         }
-
         .box {
             flex: 1;
             background-color: white;
@@ -23,7 +21,6 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
         textarea {
             width: 100%;
             border-radius: 5px;
@@ -31,7 +28,6 @@
             padding: 10px;
             font-size: 16px;
         }
-
         button {
             background-color: #4CAF50; /* Grüne Farbe */
             border: none;
@@ -45,12 +41,10 @@
             cursor: pointer;
             border-radius: 5px;
         }
-
         pre {
             white-space: pre-wrap;
             overflow-wrap: break-word;
         }
-
         #executionResult {
             margin-top: 20px;
             padding: 10px;
@@ -69,22 +63,18 @@
         function removeMarkdownCodeBlock(code) {
             return code.replace(/^```python\n|```$/gm, '');
         }
-
         async function generateCode() {
             showLoadingSpinner('loadingGifOutput'); // Ladesymbol anzeigen
-
             let text = document.getElementById('inputText').value;
             let data = { text: text };
-
             try {
-                let response = await fetch('http://codeinterpeter.azurewebsites.net/generate-code', {
+                let response = await fetch('/generate-code', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(data)
                 });
-
                 if (response.ok) {
                     let result = await response.json();
                     displayResult(result);
@@ -96,15 +86,12 @@
             } finally {
                 hideLoadingSpinner('loadingGifOutput'); // Ladesymbol verstecken
             }
-
         }
-
         async function fetchTokens() {
             try {
-                let response = await fetch('http://codeinterpeter.azurewebsites.net/display-tokens', {
+                let response = await fetch('/display-tokens', {
                     method: 'GET'
                 });
-
                 if (response.ok) {
                     let result = await response.json();
                     displayTokens(result);
@@ -115,34 +102,28 @@
                 displayError('Fehler beim Senden der Anfrage: ' + error.message);
             }
         }
-
         async function generateSyntaxTree() {
             let code = document.getElementById('inputText').value;
             let data = { code: generatedCode };
-
             try {
-                let response = await fetch('http://codeinterpeter.azurewebsites.net/generate-syntax-tree', {
+                let response = await fetch('/generate-syntax-tree', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(data)
                 });
-
                 if (!response.ok) {
                     throw new Error('Fehler beim Generieren des Syntaxbaums');
                 }
-
                 let result = await response.json();
                 displaySyntaxTree(result);
             } catch (error) {
                 displayError(error.message, 'syntaxTree');
             }
         }
-
         function displayResult(result) {
             let outputStr = '';
-
             if (result.code) {
                 let cleanCode = removeMarkdownCodeBlock(result.code);
                 outputStr = '<h3>Generierter Code:</h3><pre>' + cleanCode + '</pre>';
@@ -153,7 +134,6 @@
         
                 document.getElementById('outputCode').innerHTML = 'Kein Code generiert.';
             }
-
             if (result.tokens) {
                 displayTokens(result);
             }
@@ -167,7 +147,6 @@
             }
             document.getElementById('tokens').innerHTML = tokensStr;
         }
-
         function displaySyntaxTree(result) {
             let syntaxTreeStr = '';
             if (result.syntax_tree) {
@@ -177,19 +156,16 @@
             }
             document.getElementById('syntaxTree').innerHTML = syntaxTreeStr;
         }
-
         function displayError(errorMessage, errorSection = 'outputCode') {
             document.getElementById(errorSection).innerHTML = '<h3>Fehler:</h3><pre>' + errorMessage + '</pre>';
         }
-
         function openTokenTab(tokens) {
             let blob = new Blob([tokens], { type: 'text/plain' });
             let url = URL.createObjectURL(blob);
             window.open(url, '_blank');
         }
-
         function executeGeneratedCode() {
-            fetch('http://codeinterpeter.azurewebsites.net/execute-code', {
+            fetch('/execute-code', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -220,7 +196,6 @@
         function hideLoadingSpinner(spinnerID) {
             document.getElementById(spinnerID).style.display = 'none';
         }
-
     </script>
 </head>
 <body>

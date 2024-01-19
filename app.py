@@ -66,7 +66,6 @@ def generate_code():
     try:
         data = request.get_json()
         text = data['text']
-
         # Code zur Kommunikation mit der OpenAI API
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-1106",
@@ -74,26 +73,19 @@ def generate_code():
                       {"role": "user", "content": f"Generiere Python-Code basierend auf: {text}. Ausgabe sollte direkt in Python-Code-Form ohne zusätzliche Formatierung sein. Am Ende soll immer eine Ausgabe entstehen z.B. mit einem Befehl wie print."}]
         )
         code = response.choices[0].message['content']
-
         #Tokenisierung des generierten Codes
         tokens = list(tokenize.tokenize(BytesIO(code.encode('utf-8')).readline))
-
         # Mapping von Token-Typ-Nummern zu Token-Namen
         token_names = {value: name for name, value in vars(token).items() if isinstance(value, int)}
-
         # Token-Typ-Nummern durch lesbare Namen ersetzen
         token_data = [(token_names.get(tok.type, tok.type), tok.string) for tok in tokens if tok.type != tokenize.ENDMARKER]
-
         # Erstellen Sie den Link zum Anzeigen der Tokens
         token_url = f"http://127.0.0.1:5000/display-tokens"
-
         # Erstellen Sie den Link zum Anzeigen des generierten Codes
         code_url = f"http://127.0.0.1:5000/generate-code?code=true"
-
         # Geben Sie die Links im Terminal aus
         print(f"Um die Tokens anzuzeigen, öffnen Sie: {token_url}")
         print(f"Um den generierten Code anzuzeigen, öffnen Sie: {code_url}")
-
         # Zurückgeben oder Weiterverarbeiten der Tokens und des Codes
         return jsonify({'code': code, 'tokens': token_data})
     
@@ -102,14 +94,12 @@ def generate_code():
         return jsonify({"error": str(e)}), 500
     
     return jsonify({'code': code})
-
 @app.route('/generate-syntax-tree', methods=['POST'])
 def generate_syntax_tree():
     try:
         data = request.get_json()
         code = data['code']
         print("Empfangener Code:", code) #Nur zum Debuggen. Kann später gelöscht werden ohne sorge
-
         # Erzeugen des Syntaxbaums aus dem Code
         syntax_tree = ast.parse(code)
         # Umwandeln des Syntaxbaums in eine String-Repräsentation (optional)
@@ -119,13 +109,13 @@ def generate_syntax_tree():
     except Exception as e:
         print(f"Fehler beim Erzeugen des Syntaxbaums: {e}")
         return jsonify({"error": str(e)}), 500
-
 @app.route('/execute-code', methods=['POST'])
 def execute_code():
     try:
         data = request.get_json()
         code = data['code']
 
+        # Implementieren Sie hier Ihre Sicherheitsmaßnahmen
         errors = analyze_code(code, safe_functions)
         if errors:
             # Rückgabe einer Fehlermeldung an das Frontend
@@ -138,16 +128,13 @@ def execute_code():
         with contextlib.redirect_stdout(output):
             exec(code)
         result = output.getvalue()
-
         # Rückgabe des Ergebnisses
         return jsonify({'result': result})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
 @app.route('/')
 def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    print("Öffnen Sie http://127.0.0.1:5000 in Ihrem Webbrowser, um das Frontend zu sehen.")
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
