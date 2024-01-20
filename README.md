@@ -2,13 +2,13 @@
 
 ## Überblick 
 
-Die von Ihnen entwickelte Web-Anwendung ist ein innovatives Lehr- und Lerninstrument, speziell konzipiert für Studierende am Lehrstuhl für Systemverfahrenstechnik. Der Hauptzweck dieser Anwendung liegt darin, Studierenden, die in ihren Vorlesungen nur am Rande mit dem Programmieren in Berührung kommen, eine praktische und interaktive Erfahrung zu bieten. In diesen Vorlesungen wird häufig der Schwerpunkt auf die Vermittlung der Denkstruktur hinter dem Programmieren, also dem Pseudocode, gelegt. Unsere Anwendung baut auf diesem Konzept auf und ermöglicht es den Studierenden, ihren Pseudocode in funktionierenden Python-Code umzuwandeln. Dieser Prozess hilft ihnen nicht nur, die Syntax und Struktur von Python zu verstehen, sondern bietet auch Einblicke in die Logik und die praktische Umsetzung von Programmierkonzepten.
+Die entwickelte Web-Anwendung ist ein innovatives Lehr- und Lerninstrument, speziell konzipiert für Studierende am Lehrstuhl für Systemverfahrenstechnik der TUM (Prof. Briesen). Der Hauptzweck dieser Anwendung liegt darin, Studierenden, die in ihren Vorlesungen nur am Rande mit dem Programmieren in Berührung kommen, eine praktische und interaktive Erfahrung zu bieten. In diesen Vorlesungen wird häufig der Schwerpunkt auf die Vermittlung der Denkstruktur hinter dem Programmieren, also dem Pseudocode, gelegt. Diese Anwendung baut auf diesem Konzept auf und ermöglicht es den Studierenden, ihren Pseudocode in funktionierenden Python-Code umzuwandeln. Dieser Prozess hilft ihnen nicht nur, die Syntax und Struktur von Python zu verstehen, sondern bietet auch Einblicke in die Logik und die praktische Umsetzung von Programmierkonzepten.
 
 Durch die Integration verschiedener interaktiver Funktionen wie der Code-Generierung, der Darstellung von Syntaxbäumen und der Token-Anzeige unterstützt die Anwendung ein tiefes und umfassendes Verständnis des Programmierens. Die Studierenden können ihren eigenen Pseudocode eingeben und diesen in Python-Code umsetzen lassen, was ihnen hilft zu verstehen, wie ihre Ideen in einer realen Programmiersprache implementiert werden können. Die Visualisierung des Syntaxbaums des generierten Codes bietet einen detaillierten Einblick in die strukturelle Verarbeitung des Codes durch den Python-Interpreter, während die Anzeige der Tokens den Studierenden hilft, die grundlegenden Bausteine der Python-Syntax zu erkennen.
 
 Darüber hinaus ermöglicht die Funktion zur Code-Ausführung den Studierenden, unmittelbares Feedback zu erhalten, indem sie sehen, wie der generierte Code in der Praxis funktioniert. Dies fördert das experimentelle Lernen und unterstützt die Studierenden dabei, ein tieferes Verständnis für die Auswirkungen ihres Codes zu entwickeln. Die Web-Anwendung ist nicht nur auf Studierende der Systemverfahrenstechnik beschränkt, sondern bietet auch Anfängern und Interessierten einen Zugang zur Welt des Programmierens.
 
-Insgesamt dient die Anwendung als Brücke zwischen theoretischem Wissen und praktischer Anwendung. Sie ermutigt die Studierenden, über den Tellerrand hinauszuschauen und kreatives sowie problemlösendes Denken zu entwickeln. Dies ist in der modernen technischen Bildung von entscheidender Bedeutung. Mit ihrer benutzerfreundlichen und lehrreichen Plattform bietet die Anwendung eine wertvolle Ressource für alle, die ein grundlegendes Verständnis der Programmierung erlangen möchten.
+Insgesamt dient die Anwendung als Brücke zwischen theoretischem Wissen und praktischer Anwendung. Sie ermutigt die Studierenden, über den Tellerrand hinauszuschauen und kreatives sowie problemlösendes Denken zu entwickeln. Dies ist in der modernen technischen Bildung von entscheidender Bedeutung. Mit der benutzerfreundlichen und lehrreichen Plattform bietet die Anwendung eine wertvolle Ressource für alle, die ein grundlegendes Verständnis der Programmierung erlangen möchten.
 
 ## Features
 
@@ -32,7 +32,7 @@ Durch diese Features bietet die Web-Anwendung "Code Generator" eine umfassende u
 
 Damit die "Code Generator" Web-Anwendung effektiv genutzt werden kann, müssen einige grundlegende Voraussetzungen erfüllt sein. Diese stellen sicher, dass die Anwendung reibungslos läuft und die Nutzer die volle Funktionalität erleben können. Hier sind die wichtigsten Voraussetzungen für die Verwendung dieser Anwendung:
 
-Python-Version: Die Anwendung ist in Python geschrieben, daher ist eine Installation von Python erforderlich. Es wird empfohlen, mindestens Python 3.8 oder eine höhere Version zu verwenden, um Kompatibilitätsprobleme zu vermeiden.
+Python-Version: Die Anwendung ist in Python geschrieben, daher ist eine Installation von Python erforderlich. Es wird empfohlen, mindestens Python 3.8 (ich verwende 3.11) oder eine höhere Version zu verwenden, um Kompatibilitätsprobleme zu vermeiden.
 
 Flask Framework: Das Backend der Anwendung wird mit dem Flask-Framework entwickelt. Flask ist ein Mikro-Webframework für Python, das für seine Einfachheit und Flexibilität bekannt ist. Es muss auf dem System installiert sein, auf dem die Anwendung ausgeführt wird.
 
@@ -57,36 +57,27 @@ Die Installation der "Code Generator" Web-Anwendung ist ein geradliniger Prozess
 1. Klonen des Repositories
 Zunächst müssen Sie das Repository der Anwendung auf Ihr lokales System klonen. Öffnen Sie dazu Ihr Terminal oder Ihre Kommandozeile und führen Sie den folgenden Befehl aus:
 
-bash
-Copy code
 git clone [URL des Repositories]
 cd [Name des geklonten Verzeichnisses]
-Ersetzen Sie [URL des Repositories] mit der URL des GitHub-Repositories und [Name des geklonten Verzeichnisses] mit dem Namen des Verzeichnisses, in das das Repository geklont wurde.
 
 2. Einrichten einer Python-Umgebung
 Es wird empfohlen, eine virtuelle Python-Umgebung für die Anwendung einzurichten, um Konflikte mit anderen Python-Projekten auf Ihrem System zu vermeiden. Verwenden Sie den folgenden Befehl, um eine neue virtuelle Umgebung zu erstellen:
 
-bash
-Copy code
 python -m venv venv
 Aktivieren Sie die virtuelle Umgebung:
 
 Unter Windows:
 
-bash
-Copy code
 .\venv\Scripts\activate
 Unter Unix oder MacOS:
 
-bash
-Copy code
 source venv/bin/activate
+
 3. Installation der Abhängigkeiten
 Installieren Sie alle erforderlichen Abhängigkeiten mit dem in dem Repository enthaltenen requirements.txt-File:
 
-bash
-Copy code
 pip install -r requirements.txt
+
 Dieser Befehl installiert Flask, Graphviz und alle anderen benötigten Python-Pakete.
 
 4. Setzen des OpenAI API-Schlüssels
@@ -94,22 +85,19 @@ Setzen Sie Ihre OpenAI-API-Schlüssel als Umgebungsvariable, um die API-Anfragen
 
 Unter Unix-basierten Systemen:
 
-bash
-Copy code
 export OPENAI_API_KEY='Ihr_API_Schlüssel'
+
 Unter Windows:
 
-bash
-Copy code
 set OPENAI_API_KEY=Ihr_API_Schlüssel
 Ersetzen Sie Ihr_API_Schlüssel mit Ihrem persönlichen API-Schlüssel von OpenAI.
 
 5. Starten des Flask-Servers
+
 Nachdem alle Abhängigkeiten installiert und die Umgebungsvariablen gesetzt wurden, können Sie den Flask-Server starten:
 
-bash
-Copy code
 flask run
+
 Die Anwendung sollte nun auf http://127.0.0.1:5000/ laufen und über einen Webbrowser zugänglich sein.
 
 6. Überprüfung der Installation
@@ -120,7 +108,7 @@ Abhängig von Ihren spezifischen Anforderungen oder dem Einsatzgebiet der Anwend
 
 Mit diesen Schritten sollte die "Code Generator" Web-Anwendung erfolgreich auf Ihrem System installiert und betriebsbereit sein. Beachten Sie, dass für die Wartung oder Erweiterung der Anwendung möglicherweise zusätzliche Schritte erforderlich sind.
 
-#Nutzung 
+## Nutzung 
 
 Die "Code Generator" Web-Anwendung ist darauf ausgelegt, eine intuitive und benutzerfreundliche Erfahrung bei der Erstellung und Analyse von Python-Code zu bieten. Hier ist eine Anleitung zur Nutzung der verschiedenen Funktionen der Anwendung:
 
@@ -138,17 +126,7 @@ Syntaxbaum-Darstellung: Für eine detaillierte Analyse können Sie den Syntaxbau
 
 Token-Anzeige: Die Anwendung bietet auch die Möglichkeit, die Tokens des generierten Codes anzuzeigen. Dies ist nützlich, um die verschiedenen Elemente der Python-Syntax zu verstehen.
 
-Ausführung des generierten Codes
-Um den generierten Code auszuführen, klicken Sie auf den Button "Code ausführen". Die Anwendung führt den Code aus und zeigt das Ergebnis im Bereich "Ausführungsergebnis" an. Dies ermöglicht es Ihnen, die Funktionalität des Codes sofort zu testen und zu überprüfen.
-Experimentieren und Lernen
-Nutzen Sie die Beispielaufgaben und experimentieren Sie mit eigenen Code-Varianten. Dies hilft Ihnen, verschiedene Programmierkonzepte zu verstehen und Ihre Fähigkeiten in der Code-Erstellung zu verbessern.
-Sicherheitshinweise
-Beachten Sie, dass der generierte Code auf dem Server ausgeführt wird. Verwenden Sie die Anwendung verantwortungsbewusst und vermeiden Sie die Ausführung von Code, der potenziell unsicher oder schädlich sein könnte.
-Feedback und Verbesserungen
-Nutzen Sie die Möglichkeit, Feedback zu geben oder Vorschläge zur Verbesserung der Anwendung zu machen. Dies kann oft direkt über die Anwendung oder über das entsprechende GitHub-Repository erfolgen.
-Durch die Nutzung dieser Funktionen können Sie die "Code Generator" Web-Anwendung effektiv für Lernzwecke einsetzen, Ihr Verständnis für Python-Programmierung verbessern und Ihre Fähigkeiten im Umgang mit Code erweitern.
-
-## Schierheitshinweise
+## Sicherheitshinweise
 
 Die "Code Generator" Web-Anwendung bietet eine leistungsfähige Plattform zur Generierung und Ausführung von Python-Code. Es ist jedoch wichtig, beim Umgang mit dieser Funktionalität bestimmte Sicherheitsaspekte zu berücksichtigen, um sowohl die Sicherheit des Systems als auch die Integrität der Anwendung zu gewährleisten.
 
