@@ -56,7 +56,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-    }
+        }
+        #syntaxTree img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
     <script>
         
@@ -148,18 +152,12 @@
             document.getElementById('tokens').innerHTML = tokensStr;
         }
         function displaySyntaxTree(result) {
+            const syntaxTreeElement = document.getElementById('syntaxTree');
             if (result.syntax_tree_image_url) {
-        // Entfernen Sie den vorhandenen Inhalt
-                const syntaxTreeElement = document.getElementById('syntaxTree');
-                syntaxTreeElement.innerHTML = '';
-
-        // Fügen Sie das Bild hinzu
-                const img = new Image();
-                img.src = result.syntax_tree_image_url;
-                img.alt = 'Syntax Tree Visualization';
-                syntaxTreeElement.appendChild(img);
+                const imageUrl = result.syntax_tree_image_url + '?time=' + new Date().getTime();
+                syntaxTreeElement.innerHTML = '<img src="' + imageUrl + '" alt="Syntax Tree Visualization" />';
             } else {
-                displayError('Fehler beim Generieren des Syntaxbaums', 'syntaxTree');
+                syntaxTreeElement.textContent = 'Fehler beim Generieren des Syntaxbaums';
             }
         }
         function displayError(errorMessage, errorSection = 'outputCode') {

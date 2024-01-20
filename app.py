@@ -8,6 +8,7 @@ import ast
 import contextlib
 import io
 import token
+import time
 # Drittanbieter-Bibliothek Importe
 from flask import Flask, request, jsonify, render_template
 import openai
@@ -21,6 +22,7 @@ openai.api_key = "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"
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:8080"}})
+app.config['UPLOAD_FOLDER'] = 'static'
 
 class SafeFunctionChecker(ast.NodeVisitor):
     def __init__(self, safe_functions):
@@ -115,9 +117,16 @@ def generate_syntax_tree():
         code = data['code']
         syntax_tree = ast.parse(code)
         dot = draw_ast(syntax_tree)
-        image_path = "/path/to/static/syntax_tree"
+
+        # Erstellen Sie einen eindeutigen Dateinamen für jedes Syntaxbaum-Bild
+        unique_filename = 'syntax_tree' + str(int(time.time())) + '.png'
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
         dot.render(image_path, format='png', cleanup=True)
-        return jsonify({'syntax_tree_image_url': '/static/syntax_tree.png'})
+
+        # Generieren Sie die URL für das Bild
+        image_url = url_for('static', filename=unique_filename, _external=True)
+
+        return jsonify({'syntax_tree_image_url': image_url})
     except Exception as e:
         print(f"Fehler beim Erzeugen des Syntaxbaums: {e}")
         return jsonify({"error": str(e)}), 500
