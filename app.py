@@ -10,7 +10,6 @@ import io
 import token
 # Drittanbieter-Bibliothek Importe
 from flask import Flask, request, jsonify, render_template
-from flask_cors import CORS
 import openai
 #eigene Importe
 from safe_functions import safe_functions
@@ -19,7 +18,6 @@ from safe_functions import safe_functions
 openai.api_key = os.environ.get("OPENAI_API_KEY", "Standardwert")
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:8080"}})
 
 class SafeFunctionChecker(ast.NodeVisitor):
     def __init__(self, safe_functions):
@@ -37,25 +35,6 @@ class SafeFunctionChecker(ast.NodeVisitor):
             if func_name not in self.safe_functions and func_name not in self.local_defs:
                 self.errors.append(f"Unsichere Funktion verwendet: {func_name}")
         self.generic_visit(node)
-
-def is_openai_api_available(api_key):
-    try:
-        openai.api_key = api_key
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo-1106",
-            messages=[{"role": "system", "content": "Test"},
-                      {"role": "user", "content": f"Test"}]
-        )
-    except Exception as e:
-        print(f"Fehler bei der API-Überprüfung: {e}")
-        return False
-
-if is_openai_api_available(api_key):
-    # Die API ist verfügbar, Sie können Anfragen senden
-    print("OpenAI-API ist verfügbar")
-else:
-    # Die API ist nicht verfügbar, behandeln Sie den Fehler entsprechend
-    print("OpenAI-API ist nicht verfügbar")
 
 def analyze_code(code, safe_functions):
     try:
@@ -91,10 +70,8 @@ def generate_code():
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-1106",
             messages=[{"role": "system", "content": "Python Code Generator"},
-                  {"role": "user", "content": f"Generiere Python-Code basierend auf: {text}. Ausgabe sollte direkt in Python-Code-Form ohne zusätzliche Formatierung sein. Am Ende soll immer eine Ausgabe entstehen z.B. mit einem Befehl wie print."}]
+                      {"role": "user", "content": f"Generiere Python-Code basierend auf: {text}. Ausgabe sollte direkt in Python-Code-Form ohne zusätzliche Formatierung sein. Am Ende soll immer eine Ausgabe entstehen z.B. mit einem Befehl wie print."}]
         )
-        if response is None or 'choices' not in response:
-            raise Exception("Keine gültige Antwort von OpenAI erhalten")
         code = response.choices[0].message['content']
         #Tokenisierung des generierten Codes
         tokens = list(tokenize.tokenize(BytesIO(code.encode('utf-8')).readline))
@@ -102,6 +79,10 @@ def generate_code():
         token_names = {value: name for name, value in vars(token).items() if isinstance(value, int)}
         # Token-Typ-Nummern durch lesbare Namen ersetzen
         token_data = [(token_names.get(tok.type, tok.type), tok.string) for tok in tokens if tok.type != tokenize.ENDMARKER]
+        # Erstellen Sie den Link zum Anzeigen der Tokens
+        token_url = f"http://127.0.0.1:5000/display-tokens"
+        # Erstellen Sie den Link zum Anzeigen des generierten Codes
+        code_url = f"http://127.0.0.1:5000/generate-code?code=true"
         # Geben Sie die Links im Terminal aus
         print(f"Um die Tokens anzuzeigen, öffnen Sie: {token_url}")
         print(f"Um den generierten Code anzuzeigen, öffnen Sie: {code_url}")
@@ -154,6 +135,6 @@ def execute_code():
 @app.route('/')
 def index():
     return render_template('index.html')
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    print("Öffnen Sie http://127.0.0.1:5000 in Ihrem Webbrowser, um das Frontend zu sehen.")
+    app.run(debug=True)
