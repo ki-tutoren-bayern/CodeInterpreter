@@ -18,7 +18,7 @@ from graphviz import Digraph
 from safe_functions import safe_functions
 
 # Setzen Sie Ihren OpenAI-API-Schlüssel hier ein
-openai.api_key = "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"
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:8080"}})
