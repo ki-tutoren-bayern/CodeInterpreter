@@ -221,6 +221,71 @@
             </div>
         </div>
         <div class="box">
+            <h2>Ausführungsergebnis:</h2>
+            <pre id="executionResult"></pre>
+            <div id="loadingGifOutput" class="loadingGif" style="display: none;">
+                <img src="/static/Spinner.gif" alt="Laden...">
+            </div>
+        </div>
+        <div id="loadingGif" style="display: none;">
+            <img src="/static/Spinner.gif" alt="Laden...">
+        </div>
+    </div>
+    <div class="container">
+        <div class="box">
+            <h2>Beispielaufgaben:</h2>
+            <h3>Beispiel 1: Sortieren der Liste</h3>
+            <pre>
+                Liste = [5, 3, 8, 4, 2]
+                BubbleSort(Liste):
+                    Länge = Länge der Liste
+                    für i von 0 bis Länge - 1
+                        für j von 0 bis Länge - i - 1
+                            wenn Liste[j] > Liste[j+1]
+                                tausche Liste[j] mit Liste[j+1]
+                    BubbleSort(Liste)
+            </pre>
+            <h3>Beispiel 2: Berechnung des Durchschnitts</h3>
+            <pre>
+                BerechneDurchschnitt(Liste):
+                    Summe = 0
+                    Anzahl = Länge der Liste
+                    für jede Zahl in Liste
+                        Summe = Summe + Zahl
+                    Durchschnitt = Summe / Anzahl
+                    gib Durchschnitt zurück
+            </pre>
+            <h3>Beispiel 3: Faktorielle Berechnung</h3>
+            <pre>
+                BerechneFakultät(n):
+                    falls n gleich 0 oder n gleich 1
+                        gib 1 zurück
+                    sonst
+                        Fakultät = 1
+                        für i von 2 bis n
+                            Fakultät = Fakultät * i
+                        gib Fakultät zurück
+            </pre>
+            <h3>Beispiel 4: Berechnung der Genauigkeit von Gleitkommazahlen</h3>
+            <pre>
+                BerechneGenauigkeit():
+                    Genauigkeit = 1
+                    Fehler = 1.0
+                    Solange 1.0 + Fehler != 1.0
+                        Fehler = Fehler / 10
+                        Genauigkeit = Genauigkeit + 1
+                    gib Genauigkeit zurück
+            </pre>
+            <h3>Beispiel 5: Zeigt das systemkritische Anordnungen Aussortiert werden</h3>
+            <pre>
+                def EvaluierenAusdruck(Ausdruck):
+                    return eval(Ausdruck)
+    
+                def UnsichereCodeAusführung(Code):
+                    return eval(Code)
+            </pre>
+        </div>
+        <div class="box">
             <h2>Syntaxbaum:</h2>
             <pre id="syntaxTree"></pre>
             <div id="loadingGifOutput" class="loadingGif" style="display: none;">
@@ -233,16 +298,6 @@
             <div id="loadingGifOutput" class="loadingGif" style="display: none;">
                 <img src="/static/Spinner.gif" alt="Laden...">
             </div>
-        </div>
-        <div class="box">
-            <h2>Ausführungsergebnis:</h2>
-            <pre id="executionResult"></pre>
-            <div id="loadingGifOutput" class="loadingGif" style="display: none;">
-                <img src="/static/Spinner.gif" alt="Laden...">
-            </div>
-        </div>
-        <div id="loadingGif" style="display: none;">
-            <img src="/static/Spinner.gif" alt="Laden...">
         </div>
     </div>
 </body>
