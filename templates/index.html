@@ -29,7 +29,7 @@
             font-size: 16px;
         }
         button {
-            background-color: #4CAF50; /* Grüne Farbe */
+            background-color: #4caf54;
             border: none;
             color: white;
             padding: 10px 20px;
@@ -69,7 +69,7 @@
             return code.replace(/^```python\n|```$/gm, '');
         }
         async function generateCode() {
-            showLoadingSpinner('loadingGifOutput'); // Ladesymbol anzeigen
+            showLoadingSpinner('loadingGifOutput');
             let text = document.getElementById('inputText').value;
             let data = { text: text };
             try {
@@ -89,7 +89,7 @@
             } catch (error) {
                 displayError('Fehler beim Senden der Anfrage: ' + error.message);
             } finally {
-                hideLoadingSpinner('loadingGifOutput'); // Ladesymbol verstecken
+                hideLoadingSpinner('loadingGifOutput');
             }
         }
         async function fetchTokens() {
@@ -133,8 +133,8 @@
                 let cleanCode = removeMarkdownCodeBlock(result.code);
                 outputStr = '<h3>Generierter Code:</h3><pre>' + cleanCode + '</pre>';
                 document.getElementById('outputCode').innerHTML = outputStr;
-                generatedCode = cleanCode;  // Speichern des generierten Codes
-                generateSyntaxTree();  // Syntaxbaum generieren
+                generatedCode = cleanCode;
+                generateSyntaxTree();
             } else {
         
                 document.getElementById('outputCode').innerHTML = 'Kein Code generiert.';
@@ -179,13 +179,9 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Ergebnis anzeigen
                 if (data.error) {
-                    // Anzeigen einer Fehlermeldung, falls unsichere Funktionen gefunden wurden
                     document.getElementById('executionResult').textContent = 'Fehler: ' + data.error;
-                    // Optional: Deaktivieren der Ausführungsschaltfläche oder Anzeigen einer Warnung
                     } else {
-                    // Ergebnis anzeigen, wenn der Code sicher ist
                     document.getElementById('executionResult').textContent = 'Ergebnis: ' + data.result;
                 }
             })
@@ -194,7 +190,6 @@
                 document.getElementById('executionResult').textContent = 'Ausführungsfehler: ' + error.message;
             });
         }
-        //Ladebildschirm
         function showLoadingSpinner(spinnerID) {
             document.getElementById(spinnerID).style.display = 'flex';
         }

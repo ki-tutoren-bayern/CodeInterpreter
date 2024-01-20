@@ -1,5 +1,3 @@
-# Liste sicherer Funktionen
-
 safe_builtins = {
     'abs', 'all', 'any', 'ascii', 'bin', 'bool', 'bytearray', 'bytes', 
     'callable', 'chr', 'classmethod', 'complex', 
@@ -9,17 +7,7 @@ safe_builtins = {
     'list', 'map', 'max', 'memoryview', 'min', 'next', 'object', 
     'oct', 'ord', 'pow', 'print', 'property', 'range', 'repr', 'reversed', 
     'round', 'set', 'slice', 'sorted', 'staticmethod', 
-    'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip', 
-    'enumerate', 'filter', 'map', 'zip', 'reduce', 'iter', 'next', 
-    'getattr', 'hasattr', 
-    'callable', 'format', 'dir', 'vars', 
-    'repr', 'ascii', 'bin', 'hex', 'id', 'sorted', 'reversed', 
-    'enumerate', 'sum', 'min', 'max', 'any', 'all', 'len', 'divmod',
-    'complex', 'int', 'float', 'str', 'bool', 'bytes', 'bytearray', 
-    'memoryview', 'tuple', 'range', 'frozenset', 'property', 'classmethod', 
-    'staticmethod', 'isinstance', 'issubclass', 'iter', 'next', 'slice', 
-    'staticmethod', 'super', 'type', 'zip', 'abs', 'round', 'pow', 
-    'hex', 'bin', 'dir', 'vars',
+    'str', 'sum', 'super', 'tuple', 'type', 'vars', 'zip', 'reduce',   
 }
 
 safe_math = {
@@ -52,7 +40,6 @@ safe_json = {
     'JSONDecoder', 'JSONEncoder'
 }
 
-# Kombinierte Liste aller sicherer Funktionen
 safe_functions = {
     'builtins': safe_builtins,
     'math': safe_math,
