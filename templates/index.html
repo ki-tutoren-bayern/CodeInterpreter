@@ -148,13 +148,19 @@
             document.getElementById('tokens').innerHTML = tokensStr;
         }
         function displaySyntaxTree(result) {
-            let syntaxTreeStr = '';
-            if (result.syntax_tree) {
-                syntaxTreeStr = '<h3>Syntaxbaum:</h3><pre>' + JSON.stringify(result.syntax_tree, null, 2) + '</pre>';
+            if (result.syntax_tree_image_url) {
+        // Entfernen Sie den vorhandenen Inhalt
+                const syntaxTreeElement = document.getElementById('syntaxTree');
+                syntaxTreeElement.innerHTML = '';
+
+        // Fügen Sie das Bild hinzu
+                const img = new Image();
+                img.src = result.syntax_tree_image_url;
+                img.alt = 'Syntax Tree Visualization';
+                syntaxTreeElement.appendChild(img);
             } else {
-                syntaxTreeStr = '<h3>Fehler beim Generieren des Syntaxbaums</h3><pre>' + result.error + '</pre>';
+                displayError('Fehler beim Generieren des Syntaxbaums', 'syntaxTree');
             }
-            document.getElementById('syntaxTree').innerHTML = syntaxTreeStr;
         }
         function displayError(errorMessage, errorSection = 'outputCode') {
             document.getElementById(errorSection).innerHTML = '<h3>Fehler:</h3><pre>' + errorMessage + '</pre>';

@@ -12,6 +12,7 @@ import token
 from flask import Flask, request, jsonify, render_template
 import openai
 from flask_cors import CORS
+from graphviz import Digraph
 #eigene Importe
 from safe_functions import safe_functions
 
@@ -54,6 +55,23 @@ def analyze_code(code, safe_functions):
     except SyntaxError as e:
         return [f"Syntaxfehler im Code: {e}"]
 
+def draw_ast(node, parent_name=None, graph=None):
+    if graph is None:
+        graph = Digraph()
+        graph.attr('node', shape='box')
+
+    name = f"node{str(id(node))}"
+    label = type(node).__name__
+    graph.node(name, label=label)
+
+    if parent_name is not None:
+        graph.edge(parent_name, name)
+
+    for child in ast.iter_child_nodes(node):
+        draw_ast(child, name, graph)
+
+    return graph
+
 @app.route('/display-tokens', methods=['GET'])
 def display_tokens():
     try:
@@ -89,21 +107,21 @@ def generate_code():
         return jsonify({"error": str(e)}), 500
     
     return jsonify({'code': code})
+
 @app.route('/generate-syntax-tree', methods=['POST'])
 def generate_syntax_tree():
     try:
         data = request.get_json()
         code = data['code']
-        print("Empfangener Code:", code) #Nur zum Debuggen. Kann später gelöscht werden ohne sorge
-        # Erzeugen des Syntaxbaums aus dem Code
         syntax_tree = ast.parse(code)
-        # Umwandeln des Syntaxbaums in eine String-Repräsentation (optional)
-        tree_string = ast.dump(syntax_tree, indent=4)
-        return jsonify({'syntax_tree': tree_string})
-    
+        dot = draw_ast(syntax_tree)
+        image_path = "/path/to/static/syntax_tree"
+        dot.render(image_path, format='png', cleanup=True)
+        return jsonify({'syntax_tree_image_url': '/static/syntax_tree.png'})
     except Exception as e:
         print(f"Fehler beim Erzeugen des Syntaxbaums: {e}")
         return jsonify({"error": str(e)}), 500
+    
 @app.route('/execute-code', methods=['POST'])
 def execute_code():
     try:
