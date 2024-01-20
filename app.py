@@ -10,7 +10,7 @@ import io
 import token
 import time
 # Drittanbieter-Bibliothek Importe
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, url_for
 import openai
 from flask_cors import CORS
 from graphviz import Digraph
