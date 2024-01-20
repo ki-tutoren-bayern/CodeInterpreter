@@ -11,13 +11,15 @@ import token
 # Drittanbieter-Bibliothek Importe
 from flask import Flask, request, jsonify, render_template
 import openai
+from flask_cors import CORS
 #eigene Importe
 from safe_functions import safe_functions
 
 # Setzen Sie Ihren OpenAI-API-Schlüssel hier ein
-openai.api_key = os.environ.get("OPENAI_API_KEY", "Standardwert")
+openai.api_key = "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"
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:8080"}})
 
 class SafeFunctionChecker(ast.NodeVisitor):
     def __init__(self, safe_functions):
@@ -79,13 +81,6 @@ def generate_code():
         token_names = {value: name for name, value in vars(token).items() if isinstance(value, int)}
         # Token-Typ-Nummern durch lesbare Namen ersetzen
         token_data = [(token_names.get(tok.type, tok.type), tok.string) for tok in tokens if tok.type != tokenize.ENDMARKER]
-        # Erstellen Sie den Link zum Anzeigen der Tokens
-        token_url = f"http://127.0.0.1:5000/display-tokens"
-        # Erstellen Sie den Link zum Anzeigen des generierten Codes
-        code_url = f"http://127.0.0.1:5000/generate-code?code=true"
-        # Geben Sie die Links im Terminal aus
-        print(f"Um die Tokens anzuzeigen, öffnen Sie: {token_url}")
-        print(f"Um den generierten Code anzuzeigen, öffnen Sie: {code_url}")
         # Zurückgeben oder Weiterverarbeiten der Tokens und des Codes
         return jsonify({'code': code, 'tokens': token_data})
     
@@ -135,6 +130,6 @@ def execute_code():
 @app.route('/')
 def index():
     return render_template('index.html')
+
 if __name__ == '__main__':
-    print("Öffnen Sie http://127.0.0.1:5000 in Ihrem Webbrowser, um das Frontend zu sehen.")
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
