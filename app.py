@@ -119,7 +119,7 @@ def generate_syntax_tree():
         dot = draw_ast(syntax_tree)
 
         # Erstellen Sie einen eindeutigen Dateinamen für jedes Syntaxbaum-Bild
-        unique_filename = 'syntax_tree_' + str(int(time.time())) + '.png'
+        unique_filename = 'syntax_tree_' + str(int(time.time()))
         image_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
 
         # Stellen Sie sicher, dass der Pfad existiert
@@ -129,7 +129,7 @@ def generate_syntax_tree():
         dot.render(image_path, format='png', cleanup=True)
 
         # Generieren Sie die URL für das Bild
-        image_url = url_for('static', filename=unique_filename, _external=True)
+        image_url = url_for('static', filename=unique_filename + '.png', _external=True)
 
         return jsonify({'syntax_tree_image_url': image_url})
     except Exception as e:
