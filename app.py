@@ -17,7 +17,7 @@ from safe_functions import safe_functions
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": ["http://localhost:8080", "https://www.moodle.tum.de/", "https://codeinterpreter.mikemielchen.com"]}})
+cors = CORS(app, resources={r"/*": {"origins": ["http://localhost:8080", "https://www.moodle.tum.de/", "https://codeinterpreter.mikemielchen.com"]}})
 app.config['UPLOAD_FOLDER'] = 'static'
 
 class SafeFunctionChecker(ast.NodeVisitor):
