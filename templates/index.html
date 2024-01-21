@@ -77,6 +77,7 @@
             try {
                 let response = await fetch(base_url + '/generate-code', {
                     method: 'POST',
+                    mode: "cors",
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -97,7 +98,8 @@
         async function fetchTokens() {
             try {
                 let response = await fetch(base_url + '/display-tokens', {
-                    method: 'GET'
+                    method: 'GET',
+                    mode: "cors",
                 });
                 if (response.ok) {
                     let result = await response.json();
@@ -115,6 +117,7 @@
             try {
                 let response = await fetch(base_url + '/generate-syntax-tree', {
                     method: 'POST',
+                    mode: "cors",
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -174,6 +177,7 @@
         function executeGeneratedCode() {
             fetch(base_url + '/execute-code', {
                 method: 'POST',
+                mode: "cors",
                 headers: {
                     'Content-Type': 'application/json'
                 },
