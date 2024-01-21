@@ -154,4 +154,4 @@ Diese Sicherheitshinweise dienen dazu, ein sicheres und verantwortungsvolles Erl
 
 # Kontakt 
 
-Meld dich einfach irgendwie 
+mikemielchen@gmail.com 
