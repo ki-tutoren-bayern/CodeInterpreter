@@ -1,6 +1,6 @@
 # CodeInterpreter by Mike Mielchen
 
-Webseite abrufbar unter: codeinterpreter.mikemielchen.com
+Webseite abrufbar unter: https://codeinterpreter.mikemielchen.com
 
 ## Überblick 
 
