@@ -73,7 +73,7 @@
             let text = document.getElementById('inputText').value;
             let data = { text: text };
             try {
-                let response = await fetch('https://codeinterpreter.mikemielchen.com/generate-code', {
+                let response = await fetch('https://codeinterpreter.com/generate-code', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -94,7 +94,7 @@
         }
         async function fetchTokens() {
             try {
-                let response = await fetch('https://codeinterpreter.mikemielchen.com/display-tokens', {
+                let response = await fetch('https://codeinterpreter.comdisplay-tokens', {
                     method: 'GET'
                 });
                 if (response.ok) {
@@ -111,7 +111,7 @@
             let code = document.getElementById('inputText').value;
             let data = { code: generatedCode };
             try {
-                let response = await fetch('https://codeinterpreter.mikemielchen.com/generate-syntax-tree', {
+                let response = await fetch('https://codeinterpreter.com/generate-syntax-tree', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -170,7 +170,7 @@
             window.open(url, '_blank');
         }
         function executeGeneratedCode() {
-            fetch('https://codeinterpreter.mikemielchen.com/execute-code', {
+            fetch('https://codeinterpreter.com/execute-code', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

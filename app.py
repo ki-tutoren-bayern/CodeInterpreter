@@ -56,7 +56,6 @@ def draw_ast(node, parent_name=None, graph=None):
     name = f"node{str(id(node))}"
     label = type(node).__name__
     graph.node(name, label=label)
-
     if parent_name is not None:
         graph.edge(parent_name, name)
     for child in ast.iter_child_nodes(node):
