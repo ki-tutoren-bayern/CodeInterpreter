@@ -1,5 +1,7 @@
 # CodeInterpreter by Mike Mielchen
 
+Webseite abrufbar unter: codeinterpreter.mikemielchen.com
+
 ## Überblick 
 
 Die entwickelte Web-Anwendung ist ein innovatives Lehr- und Lerninstrument, speziell konzipiert für Studierende am Lehrstuhl für Systemverfahrenstechnik der TUM (Prof. Briesen). Der Hauptzweck dieser Anwendung liegt darin, Studierenden, die in ihren Vorlesungen nur am Rande mit dem Programmieren in Berührung kommen, eine praktische und interaktive Erfahrung zu bieten. In diesen Vorlesungen wird häufig der Schwerpunkt auf die Vermittlung der Denkstruktur hinter dem Programmieren, also dem Pseudocode, gelegt. Diese Anwendung baut auf diesem Konzept auf und ermöglicht es den Studierenden, ihren Pseudocode in funktionierenden Python-Code umzuwandeln. Dieser Prozess hilft ihnen nicht nur, die Syntax und Struktur von Python zu verstehen, sondern bietet auch Einblicke in die Logik und die praktische Umsetzung von Programmierkonzepten.
