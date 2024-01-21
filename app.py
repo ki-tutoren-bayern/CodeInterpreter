@@ -10,8 +10,9 @@ import token
 import time
 from flask import Flask, request, jsonify, render_template, url_for
 import openai
+import networkx as nx
+import matplotlib.pyplot as plt
 from flask_cors import CORS
-from graphviz import Digraph
 from safe_functions import safe_functions
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -48,19 +49,36 @@ def analyze_code(code, safe_functions):
         return checker.errors
     except SyntaxError as e:
         return [f"Syntaxfehler im Code: {e}"]
+    
+def plot_ast_to_file(code, filepath):
+    tree = ast.parse(code)
+    graph, pos = draw_ast(tree)
+    labels = nx.get_node_attributes(graph, 'label')
+    nx.draw(graph, pos, labels=labels, with_labels=True, arrows=True)
+    plt.savefig(filepath, format='png')
+    plt.close()
 
-def draw_ast(node, parent_name=None, graph=None):
+def draw_ast(node, graph=None, pos=None, parent_name=None, level=0):
     if graph is None:
-        graph = Digraph()
-        graph.attr('node', shape='box')
-    name = f"node{str(id(node))}"
+        graph = nx.DiGraph()
+        pos = {}
+    name = f"{type(node).__name__}_{str(id(node))}"
     label = type(node).__name__
-    graph.node(name, label=label)
+    graph.add_node(name, label=label)
+    pos[name] = (level, -id(node))
     if parent_name is not None:
-        graph.edge(parent_name, name)
+        graph.add_edge(parent_name, name)
     for child in ast.iter_child_nodes(node):
-        draw_ast(child, name, graph)
-    return graph
+        draw_ast(child, graph, pos, name, level + 1)
+    return graph, pos
+
+def plot_ast(code, filepath):
+    tree = ast.parse(code)
+    graph, pos = draw_ast(tree)
+    labels = nx.get_node_attributes(graph, 'label')
+    nx.draw(graph, pos, labels=labels, with_labels=True, arrows=True)
+    plt.savefig(filepath, format='png')
+    plt.close()
 
 @app.route('/display-tokens', methods=['GET'])
 def display_tokens():
@@ -95,13 +113,11 @@ def generate_syntax_tree():
     try:
         data = request.get_json()
         code = data['code']
-        syntax_tree = ast.parse(code)
-        dot = draw_ast(syntax_tree)
-        unique_filename = 'syntax_tree_' + str(int(time.time()))
+        unique_filename = 'syntax_tree_' + str(int(time.time())) + '.png'
         image_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
         os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-        dot.render(image_path, format='png', cleanup=True)
-        image_url = url_for('static', filename=unique_filename + '.png', _external=True)
+        plot_ast_to_file(code, image_path)
+        image_url = url_for('static', filename=unique_filename, _external=True)
         return jsonify({'syntax_tree_image_url': image_url})
     except Exception as e:
         print(f"Fehler beim Erzeugen des Syntaxbaums: {e}")
