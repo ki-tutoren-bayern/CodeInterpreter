@@ -1,4 +1,4 @@
-# CodeInterpreter by Mike Mielchen
+# CodeInterpreter
 
 Webseite abrufbar unter: https://codeinterpreter.mikemielchen.com
 
