@@ -3,4 +3,8 @@ Flask_Cors==4.0.0
 graphviz==0.20.1
 openai==0.27.4
 Requests==2.31.0
+<<<<<<< HEAD
 Werkzeug==2.2.3
+=======
+Werkzeug==2.2.3
+>>>>>>> 3fb0c4f317f6c2e495d23774a3505510dc52dff7
