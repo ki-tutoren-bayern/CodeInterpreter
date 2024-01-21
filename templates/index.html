@@ -62,6 +62,38 @@
             height: auto;
         }
 
+
+        .ring-loader {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+        }
+        .ring-loader:after {
+            content: " ";
+            display: inline-block;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border-radius: 50%;
+            border: 6px solid #000000;
+            border-color: #000000 transparent #000000 transparent;
+            animation: ring-loader-spin 1.2s linear infinite;
+        }
+
+        .code-example {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            color: #333;
+        }
+
+        @keyframes ring-loader-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
     <script>
         
@@ -196,11 +228,17 @@
                 document.getElementById('executionResult').textContent = 'Ausführungsfehler: ' + error.message;
             });
         }
-        function showLoadingSpinner(spinnerID) {
-            document.getElementById(spinnerID).style.display = 'flex';
+        function showLoadingSpinner() {
+            let elements = document.getElementsByClassName('ring-loader');
+            for (let element of elements) {
+                element.style.display = 'flex';
+            }
         }
-        function hideLoadingSpinner(spinnerID) {
-            document.getElementById(spinnerID).style.display = 'none';
+        function hideLoadingSpinner() {
+            let elements = document.getElementsByClassName('ring-loader');
+            for (let element of elements) {
+                element.style.display = 'none';
+            }
         }
     </script>
 </head>
@@ -211,36 +249,27 @@
             <textarea id="inputText" rows="4" placeholder="Geben Sie Ihre Anweisung hier ein"></textarea>
             <button onclick="generateCode()">Generiere Code</button>
             <button onclick="executeGeneratedCode()">Code ausführen</button>
-            <div id="loadingGifInput" class="loadingGif" style="display: none;">
-                <img src="/static/Spinner.gif" alt="Laden...">
-            </div>
+            <div class="ring-loader" style="display: none;"></div>
         </div>
         <div class="box">
             <h2>Generierter Code</h2>
             <pre id="outputCode"></pre>
-            <div id="loadingGifOutput" class="loadingGif" style="display: none;">
-                <img src="/static/Spinner.gif" alt="Laden...">
-            </div>
+            <div class="ring-loader" style="display: none;"></div>
         </div>
         <div class="box">
             <h2>Ausführungsergebnis:</h2>
             <pre id="executionResult"></pre>
-            <div id="loadingGifOutput" class="loadingGif" style="display: none;">
-                <img src="/static/Spinner.gif" alt="Laden...">
-            </div>
-        </div>
-        <div id="loadingGif" style="display: none;">
-            <img src="/static/Spinner.gif" alt="Laden...">
+            <div class="ring-loader" style="display: none;"></div>
         </div>
     </div>
     <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
         <div class="box">
             <h2>Beispielaufgaben:</h2>
-            <h>Beispiel 0: </h>
+            <h4>Beispiel 0: </h4>
             <pre>
 4 + 3
             </pre>
-            <h>Beispiel 1: Sortieren der Liste</h>
+            <h4>Beispiel 1: Sortieren der Liste</h4>
             <pre>
 Liste = [5, 3, 8, 4, 2]
 BubbleSort(Liste):
@@ -251,7 +280,7 @@ BubbleSort(Liste):
                 tausche Liste[j] mit Liste[j+1]
 BubbleSort(Liste)
             </pre>
-            <h>Beispiel 2: Berechnung des Durchschnitts</h>
+            <h4>Beispiel 2: Berechnung des Durchschnitts</h4>
             <pre>
 BerechneDurchschnitt(Liste):
     Summe = 0
@@ -261,7 +290,7 @@ BerechneDurchschnitt(Liste):
     Durchschnitt = Summe / Anzahl
     gib Durchschnitt zurück
             </pre>
-            <h>Beispiel 3: Faktorielle Berechnung</h>
+            <h4>Beispiel 3: Faktorielle Berechnung</h4>
             <pre>
 BerechneFakultät(n):
     falls n gleich 0 oder n gleich 1
@@ -272,7 +301,7 @@ BerechneFakultät(n):
             Fakultät = Fakultät * i
         gib Fakultät zurück
             </pre>
-            <h>Beispiel 4: Berechnung der Genauigkeit von Gleitkommazahlen</h>
+            <h4>Beispiel 4: Berechnung der Genauigkeit von Gleitkommazahlen</h4>
             <pre>
 BerechneGenauigkeit():
     Genauigkeit = 1
@@ -282,7 +311,7 @@ BerechneGenauigkeit():
         Genauigkeit = Genauigkeit + 1
     gib Genauigkeit zurück
             </pre>
-            <h>Beispiel 5: Zeigt das systemkritische Anordnungen Aussortiert werden</h>
+            <h4>Beispiel 5: Zeigt das systemkritische Anordnungen Aussortiert werden</h4>
             <pre>
 def EvaluierenAusdruck(Ausdruck):
     return eval(Ausdruck)
@@ -294,15 +323,15 @@ def UnsichereCodeAusführung(Code):
         <div class="box">
             <h2>Syntaxbaum:</h2>
             <pre id="syntaxTree"></pre>
-            <div id="loadingGifOutput" class="loadingGif" style="display: none;">
-                <img src="/static/Spinner.gif" alt="Laden...">
+            <div id="loadingGifInput" class="loadingGif" style="display: none;">
+            <div class="ring-loader" style="display: none;"></div>
             </div>
         </div>
         <div class="box">
             <h2>Tokens:</h2>
             <pre id="tokens"></pre>
-            <div id="loadingGifOutput" class="loadingGif" style="display: none;">
-                <img src="/static/Spinner.gif" alt="Laden...">
+            <div id="loadingGifInput" class="loadingGif" style="display: none;">
+            <div class="ring-loader" style="display: none;"></div>
             </div>
         </div>
     </div>
