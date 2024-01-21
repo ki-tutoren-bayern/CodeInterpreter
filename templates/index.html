@@ -145,7 +145,7 @@
         }
         async function generateSyntaxTree() {
             let code = document.getElementById('inputText').value;
-            let data = { code: generatedCode };
+            let data = { code: code };
             try {
                 let response = await fetch(base_url + '/generate-syntax-tree', {
                     method: 'POST',
@@ -155,15 +155,17 @@
                     },
                     body: JSON.stringify(data)
                 });
-                if (!response.ok) {
+                if (response.ok) {
+                    let result = await response.json();
+                    displaySyntaxTree(result);
+                } else {
                     throw new Error('Fehler beim Generieren des Syntaxbaums');
-                }
-                let result = await response.json();
-                displaySyntaxTree(result);
+        }
             } catch (error) {
                 displayError(error.message, 'syntaxTree');
             }
         }
+        
         function displayResult(result) {
             let outputStr = '';
             if (result.code) {
@@ -192,8 +194,7 @@
         function displaySyntaxTree(result) {
             const syntaxTreeElement = document.getElementById('syntaxTree');
             if (result.syntax_tree_image_url) {
-                const imageUrl = result.syntax_tree_image_url + '?time=' + new Date().getTime();
-                syntaxTreeElement.innerHTML = '<img src="' + imageUrl + '" alt="Syntax Tree Visualization" />';
+                syntaxTreeElement.innerHTML = '<img src="' + result.syntax_tree_image_url + '" alt="Syntax Tree Visualization" style="max-width:100%; height:auto;"/>';
             } else {
                 syntaxTreeElement.textContent = 'Fehler beim Generieren des Syntaxbaums';
             }
@@ -323,6 +324,7 @@ def UnsichereCodeAusführung(Code):
         <div class="box">
             <h2>Syntaxbaum:</h2>
             <pre id="syntaxTree"></pre>
+            <div id="syntaxTree"></div>
             <div id="loadingGifInput" class="loadingGif" style="display: none;">
             <div class="ring-loader" style="display: none;"></div>
             </div>
