@@ -10,8 +10,6 @@ import token
 import time
 from flask import Flask, request, jsonify, render_template, url_for
 import openai
-import networkx as nx
-import matplotlib.pyplot as plt
 from flask_cors import CORS
 from safe_functions import safe_functions
 
