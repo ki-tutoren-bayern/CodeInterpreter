@@ -19,10 +19,10 @@ app = Flask(__name__)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = 'static'
 
-#import matplotlib
-#import matplotlib.figure as Figure
-#import matplotlib.pyplot as plt
-#matplotlib.use('Agg')
+import matplotlib
+import matplotlib.figure as Figure
+import matplotlib.pyplot as plt
+matplotlib.use('Agg')
 from safe_functions import safe_functions
 
 #Überprüfung auf Funktionen die als unsicher erachtet werden und gibt ein self.error aus 
