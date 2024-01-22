@@ -103,6 +103,7 @@
             return code.replace(/^```python\n|```$/gm, '');
         }
         async function generateCode() {
+            console.log("generateCode aufgerufen");
             showLoadingSpinner('loadingGifOutput');
             let text = document.getElementById('inputText').value;
             let data = { text: text };
@@ -117,7 +118,9 @@
                 });
                 if (response.ok) {
                     let result = await response.json();
+                    console.log("Antwort von generate-code:", result);
                     displayResult(result);
+                    generateSyntaxTree();
                 } else {
                     displayError('Fehler beim Verbindungsaufbau');
                 }
@@ -126,6 +129,28 @@
             } finally {
                 hideLoadingSpinner('loadingGifOutput');
             }
+        }
+        function executeGeneratedCode() {
+            fetch(base_url + '/execute-code', {
+                method: 'POST',
+                mode: "cors",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: generatedCode })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('executionResult').textContent = 'Fehler: ' + data.error;
+                    } else {
+                    document.getElementById('executionResult').textContent = 'Ergebnis: ' + data.result;
+                }
+            })
+            .catch(error => {
+                console.error('Fehler bei der Ausführung des Codes: ', error);
+                document.getElementById('executionResult').textContent = 'Ausführungsfehler: ' + error.message;
+            });
         }
         async function fetchTokens() {
             try {
@@ -144,6 +169,7 @@
             }
         }
         async function generateSyntaxTree() {
+            console.log("generateSyntaxTree aufgerufen");
             let code = document.getElementById('inputText').value;
             let data = { code: code };
             try {
@@ -157,11 +183,13 @@
                 });
                 if (response.ok) {
                     let result = await response.json();
+                    console.log("Syntaxbaum generiert:", result);
                     displaySyntaxTree(result);
                 } else {
                     throw new Error('Fehler beim Generieren des Syntaxbaums');
         }
             } catch (error) {
+                console.error("Fehler bei der Erzeugung des Syntaxbaums:", response);
                 displayError(error.message, 'syntaxTree');
             }
         }
@@ -192,11 +220,12 @@
             document.getElementById('tokens').innerHTML = tokensStr;
         }
         function displaySyntaxTree(result) {
-            const syntaxTreeElement = document.getElementById('syntaxTree');
+            console.log("displaySyntaxTree aufgerufen mit Resultat:", result);
+            const syntaxTreeElement = document.getElementById('syntaxTreeImage');
             if (result.syntax_tree_image_url) {
-                syntaxTreeElement.innerHTML = '<img src="' + result.syntax_tree_image_url + '" alt="Syntax Tree Visualization" style="max-width:100%; height:auto;"/>';
+                syntaxTreeElement.src = result.syntax_tree_image_url; // Hier wird die URL des Bilds gesetzt
             } else {
-                syntaxTreeElement.textContent = 'Fehler beim Generieren des Syntaxbaums';
+                syntaxTreeElement.src = ''; // Wenn keine URL vorhanden ist, wird das Bild leer gelassen oder kann einen alternativen Text anzeigen.
             }
         }
         function displayError(errorMessage, errorSection = 'outputCode') {
@@ -207,28 +236,7 @@
             let url = URL.createObjectURL(blob);
             window.open(url, '_blank');
         }
-        function executeGeneratedCode() {
-            fetch(base_url + '/execute-code', {
-                method: 'POST',
-                mode: "cors",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ code: generatedCode })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    document.getElementById('executionResult').textContent = 'Fehler: ' + data.error;
-                    } else {
-                    document.getElementById('executionResult').textContent = 'Ergebnis: ' + data.result;
-                }
-            })
-            .catch(error => {
-                console.error('Fehler bei der Ausführung des Codes: ', error);
-                document.getElementById('executionResult').textContent = 'Ausführungsfehler: ' + error.message;
-            });
-        }
+        
         function showLoadingSpinner() {
             let elements = document.getElementsByClassName('ring-loader');
             for (let element of elements) {
@@ -322,10 +330,10 @@ def UnsichereCodeAusführung(Code):
             </pre>
         </div>
         <div class="box">
-            <h2>Syntaxbaum:</h2>
+            <h2>Syntaxbaum: aktuell nicht Funktionsfähig wegen CORS-Probelmen mit Moodle</h2>
             <pre id="syntaxTree"></pre>
-            <div id="syntaxTree"></div>
             <div id="loadingGifInput" class="loadingGif" style="display: none;">
+                <img id="syntaxTreeImage" src="" alt="Syntax Tree Visualization" style="max-width:100%; height:auto;"/>
             <div class="ring-loader" style="display: none;"></div>
             </div>
         </div>

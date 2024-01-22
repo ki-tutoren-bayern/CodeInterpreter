@@ -11,9 +11,7 @@ import time
 from flask import Flask, request, jsonify, render_template, url_for
 import openai
 import networkx as nx
-import matplotlib.pyplot as plt
 from flask_cors import CORS
-from safe_functions import safe_functions
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -21,16 +19,21 @@ app = Flask(__name__)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = 'static'
 
+import matplotlib
+import matplotlib.figure as Figure
+import matplotlib.pyplot as plt
+matplotlib.use('Agg')
+from safe_functions import safe_functions
+
+#Überprüfung auf Funktionen die als unsicher erachtet werden und gibt ein self.error aus 
 class SafeFunctionChecker(ast.NodeVisitor):
     def __init__(self, safe_functions):
         self.safe_functions = safe_functions
         self.errors = []
         self.local_defs = set()  
-
     def visit_FunctionDef(self, node):
         self.local_defs.add(node.name)
         self.generic_visit(node)
-
     def visit_Call(self, node):
         if isinstance(node.func, ast.Name):
             func_name = node.func.id
@@ -38,6 +41,7 @@ class SafeFunctionChecker(ast.NodeVisitor):
                 self.errors.append(f"Unsichere Funktion verwendet: {func_name}")
         self.generic_visit(node)
 
+#Überprüfung auf unsichere Funktionen als Schnittstelle zwischen Code und SafeFunctionChecker
 def analyze_code(code, safe_functions):
     try:
         combined_safe_functions = set()
@@ -53,10 +57,12 @@ def analyze_code(code, safe_functions):
 def plot_ast_to_file(code, filepath):
     tree = ast.parse(code)
     graph, pos = draw_ast(tree)
+    fig = plt.figure()
+    ax = fig.subplots()
     labels = nx.get_node_attributes(graph, 'label')
-    nx.draw(graph, pos, labels=labels, with_labels=True, arrows=True)
-    plt.savefig(filepath, format='png')
-    plt.close()
+    nx.draw(graph, pos, labels=labels, with_labels=True, arrows=True, ax=ax)
+    fig.savefig(filepath, format='png')
+    plt.close(fig)
 
 def draw_ast(node, graph=None, pos=None, parent_name=None, level=0):
     if graph is None:
@@ -102,6 +108,7 @@ def generate_code():
         tokens = list(tokenize.tokenize(BytesIO(code.encode('utf-8')).readline))
         token_names = {value: name for name, value in vars(token).items() if isinstance(value, int)}
         token_data = [(token_names.get(tok.type, tok.type), tok.string) for tok in tokens if tok.type != tokenize.ENDMARKER]
+        print(f"Generierter Code: {code}")
         return jsonify({'code': code, 'tokens': token_data})
     except Exception as e:
         print(f"Fehler bei der Codegenerierung: {e}")
@@ -112,12 +119,14 @@ def generate_code():
 def generate_syntax_tree():
     try:
         data = request.get_json()
+        print("Daten erhalten für generate-syntax-tree:", data)
         code = data['code']
         unique_filename = 'syntax_tree_' + str(int(time.time())) + '.png'
         image_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
         os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
         plot_ast_to_file(code, image_path)
         image_url = url_for('static', filename=unique_filename, _external=True)
+        print(f"Syntaxbaum generiert und Bild gespeichert: {image_url}")
         return jsonify({'syntax_tree_image_url': image_url})
     except Exception as e:
         print(f"Fehler beim Erzeugen des Syntaxbaums: {e}")
@@ -131,6 +140,10 @@ def execute_code():
         errors = analyze_code(code, safe_functions)
         if errors:
             return jsonify({"error": "Unsichere Funktionen gefunden: " + ", ".join(errors)})
+        try:
+            compiled_code = compile(code, filename='<string>', mode='exec')
+        except SyntaxError as e:
+            return jsonify({"error": "Syntaxfehler im Code: " + str(e)})
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
             exec(code)
