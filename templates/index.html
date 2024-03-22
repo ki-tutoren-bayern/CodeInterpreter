@@ -186,8 +186,8 @@
         function displayTokens(result) {
             let tokensStr = '';
             if (result.tokens) {
-                tokensStr = result.tokens.map(token => `${token[0]}: ${token[1]}`).join('\n');
-                tokensStr = '<h3>Tokens:</h3><pre>' + tokensStr + '</pre>';
+                tokensStr = result.tokens.map(token => ``).join('\n');
+                tokensStr = '' + tokensStr + '';
             }
             document.getElementById('tokens').innerHTML = tokensStr;
         }
@@ -260,81 +260,8 @@
         <div class="box">
             <h2>Ausführungsergebnis:</h2>
             <pre id="executionResult"></pre>
-            <div class="ring-loader" style="display: none;"></div>
-        </div>
-    </div>
-    <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
-        <div class="box">
-            <h2>Beispielaufgaben:</h2>
-            <h4>Beispiel 0: </h4>
-            <pre>
-4 + 3
-            </pre>
-            <h4>Beispiel 1: Sortieren der Liste</h4>
-            <pre>
-Liste = [5, 3, 8, 4, 2]
-BubbleSort(Liste):
-    Länge = Länge der Liste
-    für i von 0 bis Länge - 1
-        für j von 0 bis Länge - i - 1
-            wenn Liste[j] > Liste[j+1]
-                tausche Liste[j] mit Liste[j+1]
-BubbleSort(Liste)
-            </pre>
-            <h4>Beispiel 2: Berechnung des Durchschnitts</h4>
-            <pre>
-BerechneDurchschnitt(Liste):
-    Summe = 0
-    Anzahl = Länge der Liste
-    für jede Zahl in Liste
-        Summe = Summe + Zahl
-    Durchschnitt = Summe / Anzahl
-    gib Durchschnitt zurück
-            </pre>
-            <h4>Beispiel 3: Faktorielle Berechnung</h4>
-            <pre>
-BerechneFakultät(n):
-    falls n gleich 0 oder n gleich 1
-        gib 1 zurück
-    sonst
-        Fakultät = 1
-        für i von 2 bis n
-            Fakultät = Fakultät * i
-        gib Fakultät zurück
-            </pre>
-            <h4>Beispiel 4: Berechnung der Genauigkeit von Gleitkommazahlen</h4>
-            <pre>
-BerechneGenauigkeit():
-    Genauigkeit = 1
-    Fehler = 1.0
-    Solange 1.0 + Fehler != 1.0
-        Fehler = Fehler / 10
-        Genauigkeit = Genauigkeit + 1
-    gib Genauigkeit zurück
-            </pre>
-            <h4>Beispiel 5: Zeigt das systemkritische Anordnungen Aussortiert werden</h4>
-            <pre>
-def EvaluierenAusdruck(Ausdruck):
-    return eval(Ausdruck)
-    
-def UnsichereCodeAusführung(Code):
-    return eval(Code)
-            </pre>
-        </div>
-        <div class="box">
-            <h2>Syntaxbaum:</h2>
-            <pre id="syntaxTree"></pre>
-            <div id="syntaxTree"></div>
-            <div id="loadingGifInput" class="loadingGif" style="display: none;">
-            <div class="ring-loader" style="display: none;"></div>
-            </div>
-        </div>
-        <div class="box">
-            <h2>Tokens:</h2>
             <pre id="tokens"></pre>
-            <div id="loadingGifInput" class="loadingGif" style="display: none;">
             <div class="ring-loader" style="display: none;"></div>
-            </div>
         </div>
     </div>
 </body>
