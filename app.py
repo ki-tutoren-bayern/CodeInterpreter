@@ -1,6 +1,7 @@
 import os
 import tokenize
 from io import BytesIO
+from multiprocessing import Process, Queue 
 import ast
 import contextlib
 import io
@@ -79,7 +80,16 @@ def generate_syntax_tree():
     except Exception as e:
         print(f"Fehler beim Erzeugen des Syntaxbaums: {e}")
         return jsonify({"error": str(e)}), 500
-    
+
+def run_code(code, output_queue):
+    try:
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            exec(code)
+        output_queue.put(output.getvalue())
+    except Exception as e:
+        output_queue.put(str(e))  
+
 @app.route('/execute-code', methods=['POST'])
 def execute_code():
     try:
@@ -88,13 +98,18 @@ def execute_code():
         errors = analyze_code(code, safe_functions)
         if errors:
             return jsonify({"error": "Unsichere Funktionen gefunden: " + ", ".join(errors)})
-        output = io.StringIO()
-        with contextlib.redirect_stdout(output):
-            exec(code)
-        result = output.getvalue()
+        output_queue = Queue()
+        process = Process(target=run_code, args=(code, output_queue))
+        process.start()
+        process.join(timeout=5)
+        if process.is_alive():
+            process.terminate() 
+            return jsonify({"error": "Zeitüberschreitung bei der Codeausführung"})
+        result = output_queue.get() 
         return jsonify({'result': result})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 @app.route('/')
 def index():
     return render_template('index.html')
