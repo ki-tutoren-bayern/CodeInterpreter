@@ -13,7 +13,7 @@ import openai
 from flask_cors import CORS
 from safe_functions import safe_functions
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY") #überprüfung ob ein Mergekonflik vorliegt
 
 app = Flask(__name__)
 CORS(app)
