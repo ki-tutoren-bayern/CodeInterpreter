@@ -8,8 +8,8 @@ import contextlib
 import io
 import token
 import time
-import networkx as nx
-import matplotlib.pyplot as plt 
+# import networkx as nx
+# import matplotlib.pyplot as plt 
 from flask import Flask, request, jsonify, render_template, url_for
 import openai
 from flask_cors import CORS
@@ -50,43 +50,43 @@ def analyze_code(code, safe_functions):
     except SyntaxError as e:
         return [f"Syntaxfehler im Code: {e}"]
     
-def plot_ast_to_file(code, filepath):
-    tree = ast.parse(code)
-    graph, pos = draw_ast(tree)
-    labels = nx.get_node_attributes(graph, 'label')
-    nx.draw(graph, pos, labels=labels, with_labels=True, arrows=True)
-    plt.savefig(filepath, format='png')
-    plt.close()
+# def plot_ast_to_file(code, filepath):
+#     tree = ast.parse(code)
+#     graph, pos = draw_ast(tree)
+#     labels = nx.get_node_attributes(graph, 'label')
+#     nx.draw(graph, pos, labels=labels, with_labels=True, arrows=True)
+#     plt.savefig(filepath, format='png')
+#     plt.close()
 
-def draw_ast(node, graph=None, pos=None, parent_name=None, level=0):
-    if graph is None:
-        graph = nx.DiGraph()
-        pos = {}
-    name = f"{type(node).__name__}_{str(id(node))}"
-    label = type(node).__name__
-    graph.add_node(name, label=label)
-    pos[name] = (level, -id(node))
-    if parent_name is not None:
-        graph.add_edge(parent_name, name)
-    for child in ast.iter_child_nodes(node):
-        draw_ast(child, graph, pos, name, level + 1)
-    return graph, pos
+# def draw_ast(node, graph=None, pos=None, parent_name=None, level=0):
+#     if graph is None:
+#         graph = nx.DiGraph()
+#         pos = {}
+#     name = f"{type(node).__name__}_{str(id(node))}"
+#     label = type(node).__name__
+#     graph.add_node(name, label=label)
+#     pos[name] = (level, -id(node))
+#     if parent_name is not None:
+#         graph.add_edge(parent_name, name)
+#     for child in ast.iter_child_nodes(node):
+#         draw_ast(child, graph, pos, name, level + 1)
+#     return graph, pos
 
-def plot_ast(code, filepath):
-    tree = ast.parse(code)
-    graph, pos = draw_ast(tree)
-    labels = nx.get_node_attributes(graph, 'label')
-    nx.draw(graph, pos, labels=labels, with_labels=True, arrows=True)
-    plt.savefig(filepath, format='png')
-    plt.close()
+# def plot_ast(code, filepath):
+#     tree = ast.parse(code)
+#     graph, pos = draw_ast(tree)
+#     labels = nx.get_node_attributes(graph, 'label')
+#     nx.draw(graph, pos, labels=labels, with_labels=True, arrows=True)
+#     plt.savefig(filepath, format='png')
+#     plt.close()
 
-@app.route('/display-tokens', methods=['GET'])
-def display_tokens():
-    try:
-        return jsonify({'tokens': sample_tokens})
-    except Exception as e:
-        print(f"Fehler beim Bereitstellen der Tokens: {e}")
-        return jsonify({"error": str(e)}), 500
+# @app.route('/display-tokens', methods=['GET'])
+# def display_tokens():
+#     try:
+#         return jsonify({'tokens': sample_tokens})
+#     except Exception as e:
+#         print(f"Fehler beim Bereitstellen der Tokens: {e}")
+#         return jsonify({"error": str(e)}), 500
     
 @app.route('/generate-code', methods=['POST','GET'])
 def generate_code():
@@ -116,7 +116,7 @@ def generate_syntax_tree():
         unique_filename = 'syntax_tree_' + str(int(time.time())) + '.png'
         image_path = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
         os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-        plot_ast_to_file(code, image_path)
+        #plot_ast_to_file(code, image_path)
         image_url = url_for('static', filename=unique_filename, _external=True)
         return jsonify({'syntax_tree_image_url': image_url})
     except Exception as e:
