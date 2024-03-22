@@ -8,6 +8,8 @@ import contextlib
 import io
 import token
 import time
+import networkx as nx
+import matplotlib.pyplot as plt 
 from flask import Flask, request, jsonify, render_template, url_for
 import openai
 from flask_cors import CORS
