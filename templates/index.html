@@ -175,6 +175,36 @@
         function removeMarkdownCodeBlock(code) {
             return code.replace(/^```python\n|```$/gm, '');
         }
+
+        function sendFeedback() {
+            var pseudocodeInput = document.getElementById('inputText').value;
+            var generatedCode = document.getElementById('outputCode').innerText;
+            var executionResult = document.getElementById('executionResult').innerText;
+            var improvementSuggestion = document.getElementById('feedbackInput').value;
+            fetch(base_url + '/feedback-endpoint', {
+                method: 'POST',
+                mode: "cors",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    pseudocode_input: pseudocodeInput,
+                    generated_code: generatedCode,
+                    execution_result: executionResult,
+                    improvement_suggestion: improvementSuggestion
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.getElementById('feedbackInput').value = '';
+                alert('Ihr Feedback wurde erfolgreich gesendet. Vielen Dank!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
         async function generateCode() {
             showLoadingSpinner('loadingGifOutput');
             let text = document.getElementById('inputText').value;
@@ -328,7 +358,7 @@
     <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
         <div class="box">
             <h2>Eingabe:</h2>
-            <textarea id="inputText" rows="4" placeholder="Geben Sie Ihre Anweisung hier ein"></textarea>
+            <textarea id="inputText" rows="4" placeholder="Geben Sie Ihre Anweisung hier ein" spellcheck="false" ></textarea>
             <button onclick="generateCode()">Generiere Code</button>
             <div class="ring-loader" style="display: none;"></div>
         </div>
@@ -338,10 +368,18 @@
             <button onclick="executeGeneratedCode()">Code ausführen</button>
             <div class="ring-loader" style="display: none;"></div>
         </div>
+    </div>
+    <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
         <div class="box">
             <h2>Ausführungsergebnis:</h2>
             <pre id="executionResult"></pre>
             <pre id="tokens"></pre>
+            <div class="ring-loader" style="display: none;"></div>
+        </div>
+        <div class="box">
+            <h2>Feedback-Funktion</h2>
+            <textarea id="feedbackInput" placeholder="Geben Sie hier Ihr Feedback ein..."></textarea>
+            <button onclick="sendFeedback()">Feedback senden</button>
             <div class="ring-loader" style="display: none;"></div>
         </div>
     </div>

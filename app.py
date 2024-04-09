@@ -1,5 +1,6 @@
 import os
 import tokenize
+from datetime import datetime
 from io import BytesIO
 from multiprocessing import Process, Queue 
 import ast
@@ -8,6 +9,7 @@ import io
 import token
 import time
 from flask import Flask, request, jsonify, render_template, url_for
+from flask_sqlalchemy import SQLAlchemy
 import openai
 from flask_cors import CORS
 from safe_functions import safe_functions
@@ -17,6 +19,18 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 app = Flask(__name__)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = 'static'
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'Datenbank/feedback.db')
+
+db = SQLAlchemy(app)
+
+class Feedback(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    pseudocode_input = db.Column(db.String(500), nullable=False)
+    generated_code = db.Column(db.String(500), nullable=False)
+    execution_result = db.Column(db.String(500), nullable=False)
+    improvement_suggestion = db.Column(db.String(500), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 class SafeFunctionChecker(ast.NodeVisitor):
     def __init__(self, safe_functions):
@@ -110,9 +124,24 @@ def execute_code():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+@app.route('/feedback-endpoint', methods=['POST'])
+def save_feedback():
+    data = request.get_json()
+    feedback = Feedback(
+        pseudocode_input=data['pseudocode_input'],
+        generated_code=data['generated_code'],
+        execution_result=data['execution_result'],
+        improvement_suggestion=data['improvement_suggestion']
+    )
+    db.session.add(feedback)
+    db.session.commit()
+    return jsonify({'message': 'Feedback saved successfully'}), 200
+    
 @app.route('/')
 def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(host='0.0.0.0', port=5000, debug= True)
