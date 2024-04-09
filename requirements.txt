@@ -1,6 +1,18 @@
+#Diese werden für den Programmablauf benötigt
+
 Flask==2.2.3
 Flask_Cors==4.0.0
 graphviz==0.20.1
 openai==0.27.4
 Requests==2.31.0
 Werkzeug==2.2.3
+
+#Diese sind dazu Bibliotheken, können die Studenten zusätzlich benutzen - Demnach nur sichere Bibliotheken einfügen 
+
+    #Grundlegende Bibliotheken für wissenchaftliches Arbeiten
+numpy==1.21.2 
+pandas==1.3.3
+matplotlib==3.4.3
+scikit-learn==0.24.2
+seaborn==0.11.2
+scipy==1.7.3
