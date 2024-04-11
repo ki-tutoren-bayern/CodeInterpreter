@@ -31,6 +31,8 @@ class Feedback(db.Model):
     execution_result = db.Column(db.String(500), nullable=False)
     improvement_suggestion = db.Column(db.String(500), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.String(20), default='Unbearbeitet')
+    comment = db.Column(db.Text, default='')
 
 class SafeFunctionChecker(ast.NodeVisitor):
     def __init__(self, safe_functions):
@@ -131,7 +133,9 @@ def save_feedback():
         pseudocode_input=data['pseudocode_input'],
         generated_code=data['generated_code'],
         execution_result=data['execution_result'],
-        improvement_suggestion=data['improvement_suggestion']
+        improvement_suggestion=data['improvement_suggestion'],
+        status='Unbearbeitet',
+        comment=''
     )
     db.session.add(feedback)
     db.session.commit()
