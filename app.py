@@ -8,7 +8,7 @@ import contextlib
 import io
 import token
 import time
-from flask import Flask, request, jsonify, render_template, url_for
+from flask import Flask, request, jsonify, render_template, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 import openai
 from flask_cors import CORS
@@ -71,7 +71,7 @@ def generate_code():
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-1106",
             messages=[{"role": "system", "content": "Python Code Generator"},
-                      {"role": "user", "content": f"Generiere Python-Code basierend auf: {text}. Ausgabe sollte direkt in Python-Code-Form ohne zusätzliche Formatierung sein. Am Ende soll immer eine Ausgabe entstehen z.B. mit einem Befehl wie print."}]
+                      {"role": "user", "content": f"Generiere Python-Code basierend auf: {text}. Ausgabe sollte direkt in Python-Code-Form ohne zusätzliche Formatierung sein. Am Ende soll immer eine Ausgabe entstehen z.B. mit einem Befehl wie print. Schreibe nur Code der direkt ausgeführt werden kann."}]
         )
         code = response.choices[0].message['content']
         tokens = list(tokenize.tokenize(BytesIO(code.encode('utf-8')).readline))
@@ -140,6 +140,30 @@ def save_feedback():
     db.session.add(feedback)
     db.session.commit()
     return jsonify({'message': 'Feedback saved successfully'}), 200
+
+@app.route('/feedback', methods=['GET'])
+def feedback_control():
+    id = request.args.get('id')
+    min_id = db.session.query(db.func.min(Feedback.id)).scalar()
+    max_id = db.session.query(db.func.max(Feedback.id)).scalar()
+    if id is None or int(id) < min_id:
+        id = max_id
+    elif int(id) > max_id:
+        id = min_id
+    feedback = Feedback.query.get(id)
+    return render_template('feedback_control.html', feedback=feedback, comment=feedback.comment)
+
+@app.route('/update-feedback', methods=['POST'])
+def update_feedback():
+    id = request.args.get('id')
+    feedback = Feedback.query.get(id)
+    if feedback is None:
+        return "Feedback not found", 404
+    feedback.status = request.form.get('status')
+    feedback.comment = request.form.get('comment')
+    db.session.add(feedback)
+    db.session.commit()
+    return redirect(url_for('feedback_control'))
     
 @app.route('/')
 def index():

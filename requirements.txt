@@ -5,5 +5,6 @@ openai==0.27.4
 Requests==2.31.0
 Werkzeug==2.2.3
 Flask_SQLAlchemy==2.5.1
+SQLAlchemy==1.4.27
 
 numpy==1.26.4
